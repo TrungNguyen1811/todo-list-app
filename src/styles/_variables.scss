@@ -1,0 +1,24 @@
+$bp-large: 78.15em; // 1250px
+$bp-medium: 61.25em; // 980px
+$bp-small: 37.5em; // 600px
+$bp-smallest: 31.25em; // 500px
+
+// 🎨 Color Palette
+
+// Background
+$color-bg-light: #fefae0; // nền sáng chính (body, content)
+$color-bg-dark: #283618; // nền tối (footer, section đặc biệt)
+
+// Header / Navbar
+$color-heading: #606c38; // nền header / navbar, tiêu đề
+
+// Primary Accent
+$color-primary: #dda15e; // màu chính (button, highlight)
+$color-primary-dark: #bc6c25; // màu chính đậm hơn (hover, active)
+
+// Text
+$color-text-dark: #283618; // text đậm
+$color-text-light: #fefae0; // text sáng (trên nền tối)
+
+// Border
+$color-border: #bc6c25; // viền nhấn
