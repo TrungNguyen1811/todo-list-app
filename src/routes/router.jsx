@@ -7,6 +7,7 @@ import HomePage from "../pages/HomePage/HomePage";
 import { SignUp } from "../pages/SignUp/SignUp";
 import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/Dashboard";
+import { SignIn } from "@/pages/SignIn/SignIn";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading layout...</div>}>
         <SignUp />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/sign-in",
+    element: (
+      <Suspense fallback={<div>Loading layout...</div>}>
+        <SignIn />
       </Suspense>
     ),
   },
