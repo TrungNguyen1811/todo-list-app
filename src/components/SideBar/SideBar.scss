@@ -1,0 +1,25 @@
+.sidebar {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 124px);
+  // height: 100%;
+
+  &__logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .ant-menu {
+    border-right: 0;
+    flex: 1;
+  }
+
+  &__actions {
+    padding: 1rem;
+    border-top: 1px solid #f0f0f0;
+  }
+}

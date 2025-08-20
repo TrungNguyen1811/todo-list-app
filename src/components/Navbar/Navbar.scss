@@ -1,0 +1,9 @@
+.app-nav {
+  border-bottom: none; // bỏ border mặc định của AntD
+  background: transparent;
+
+  .ant-menu-item {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
