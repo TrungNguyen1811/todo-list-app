@@ -11,7 +11,6 @@ export default function ListTask() {
 
   return (
     <div>
-      <AddTask />
        <EditTask task={editingTask} onClose={() => setEditingTask(null)} />
       {tasks.map(task => (
         <TaskItem key={task.id} task={task} onEdit={(task) => setEditingTask(task)} />

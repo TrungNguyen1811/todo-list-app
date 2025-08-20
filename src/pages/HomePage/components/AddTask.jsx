@@ -4,7 +4,7 @@ import { addTaskRequest } from '../../../sagas/task/taskSlice'
 
 import { Modal, Button } from 'antd'
 import { Flex } from 'antd'
-import TaskFormBase from '../../../components/TaskFormBase'
+import TaskFormBase from '../../../components/TaskForm.jsx/TaskFormBase'
 
 export default function AddTask() {
   const [open, setOpen] = useState(false)

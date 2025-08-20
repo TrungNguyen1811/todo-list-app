@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { updateTaskRequest } from '../../../sagas/task/taskSlice'
 import { Modal } from 'antd'
-import TaskFormBase from '../../../components/TaskFormBase'
+import TaskFormBase from '../../../components/TaskForm.jsx/TaskFormBase'
 
 export default function EditTask({ task, onClose }) {
   const dispatch = useDispatch()

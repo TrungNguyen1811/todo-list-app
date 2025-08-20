@@ -6,6 +6,11 @@ const TASK_API = {
     return res.data
   },
 
+  getTask: async (task) => {
+    const res = await instance.get(`/todos/${task.id}`)
+    return res.data
+  },
+
   post: async (data) => {
     delete data['id']
     const res = await instance.post(`/todos`, { ...data })

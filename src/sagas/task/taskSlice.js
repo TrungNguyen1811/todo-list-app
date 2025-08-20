@@ -5,6 +5,7 @@ const taskSlice = createSlice({
   name: "task",
   initialState: {
     list: [],
+    task: null,
     loading: false,
     error: null,
   },
@@ -19,6 +20,18 @@ const taskSlice = createSlice({
     getTasksFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+
+    getTaskRequest: (state) => {
+      state.loading = true
+    },
+    getTaskSuccess: (state, action) => {
+      state.loading = false
+      state.task = action.payload
+    },
+    getTaskFailure: (state, action) => {
+      state.loading = false
+      state.error = action.payload
     },
 
     addTaskRequest: (state) => {
@@ -65,6 +78,9 @@ export const {
   getTasksRequest,
   getTasksSuccess,
   getTasksFailure,
+  getTaskRequest,
+  getTaskSuccess,
+  getTaskFailure,
   addTaskRequest,
   addTaskSuccess,
   addTaskFailure,
