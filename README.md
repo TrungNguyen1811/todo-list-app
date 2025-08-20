@@ -19,18 +19,7 @@ Hỗ trợ quản lý task, drag & drop, Redux Toolkit + Saga để xử lý sta
 ## 📦 Cài đặt
 
 Clone repo và cài dependencies:
-git clone https://github.com/your-username/todo-kanban-app.git
-cd todo-kanban-app
-pnpm install
-
-Chạy ứng dụng dev:
-pnpm dev
-
-Build production:
-pnpm build
-
-Preview build:
-pnpm preview
+<img width="537" height="357" alt="image" src="https://github.com/user-attachments/assets/0280615a-f2f4-40f4-ac63-be27640699e4" />
 
 
 ## 📂 Cấu trúc thư mục
@@ -38,35 +27,24 @@ pnpm preview
 
 ## Git Flow
 - Branch
-main: bản release
-develop: code ổn định chuẩn bị release
-feature/: phát triển tính năng mới
-release/: chuẩn bị phát hành
-hotfix/: vá lỗi gấp trên production
+<img width="342" height="126" alt="image" src="https://github.com/user-attachments/assets/969b95f9-00c0-4e20-86a5-4e5e35789eaa" />
+
 
 - Flow
-git pull origin develop
-git checkout -b feature/<tên-task>
-git add .
-git commit -m "feat: implement ...."
-git push -u origin  feature/<tên-task>
-git fetch origin
-git pull --rebase origin develop
-Create PR from feature/<tên-task> → develop.
-Đợi code review + CI test.
-Remove branch 
+<img width="403" height="258" alt="image" src="https://github.com/user-attachments/assets/2b389aee-6229-42d0-a36c-893c8a9c45ee" />
+
 
 - Just 1 commit/ 1 PR
-git commit —amend —no-edit: Không sinh ra commit (add thêm file không tạo thêm commit)
+<img width="732" height="18" alt="image" src="https://github.com/user-attachments/assets/6fa4263f-70a0-4be2-bee2-d9e251711b79" />
+
 
 - Merge nhiều commit thành 1 commit
-git reflog —oneline: view histort log
-git reset —soft <<commit id before first commit>>
+<img width="456" height="60" alt="image" src="https://github.com/user-attachments/assets/c3c74390-dbb6-4dfc-b27c-61c25c6f1a65" />
+
 
 - Structure commit:
-feat:	Tính năng mới	(feat: thêm chức năng upload file)
-fix:	Sửa bug	(fix: xử lý lỗi crash khi login)
-refactor:	Refactor code	(refactor: tối ưu hàm validateEmail)
+<img width="547" height="85" alt="image" src="https://github.com/user-attachments/assets/f123c718-a68b-4210-94c1-2145308c606e" />
+
 
 
 
