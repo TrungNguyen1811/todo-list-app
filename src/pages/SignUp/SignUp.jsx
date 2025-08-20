@@ -6,7 +6,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { createUserRequest } from "@/sagas/users/userSlice";
 import { Alert } from "antd";
-import { useState } from "react";
 import { Input } from "antd";
 
 const fields = [
@@ -54,7 +53,6 @@ const validationSchema = Yup.object({
 export function SignUp() {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.user);
-  const [success, setSuccess] = useState(false);
 
   const formik = useFormik({
     initialValues: {
