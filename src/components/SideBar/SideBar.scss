@@ -2,7 +2,6 @@
   background: #fff;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 124px);
   // height: 100%;
 
   &__logo {
@@ -21,5 +20,23 @@
   &__actions {
     padding: 1rem;
     border-top: 1px solid #f0f0f0;
+  }
+
+  .sidebar__logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+    color: #165dc0;
+    &-icon {
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+      color: #165dc0;
+      &.collapsed {
+        margin-right: 0;
+      }
+    }
   }
 }

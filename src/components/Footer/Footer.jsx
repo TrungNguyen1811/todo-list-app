@@ -1,12 +1,13 @@
 // Footer.tsx
-import './Footer.scss'
+import { Layout } from "antd";
+import "./Footer.scss";
 
 function Footer() {
   return (
-    <footer className='footer'>
-      <p className='footer__text'>© 2025 My Company. All rights reserved.</p>
-    </footer>
-  )
+    <Layout.Footer className="footer">
+      <p className="footer__text">© 2025 My Company. All rights reserved.</p>
+    </Layout.Footer>
+  );
 }
 
-export default Footer
+export default Footer;

@@ -1,40 +1,55 @@
-import { Layout, Menu, Button } from 'antd'
+import { useNavigate } from "react-router-dom";
+
+import { Layout, Menu, Button } from "antd";
 import {
-  AppstoreOutlined,
-  FilterOutlined,
-  PlusOutlined,
-  ProjectOutlined,
-} from '@ant-design/icons'
+  BarChartOutlined,
+  CalendarOutlined,
+  ScheduleOutlined,
+} from "@ant-design/icons";
 
-import './Sidebar.scss'
+import "./Sidebar.scss";
 
-const { Sider: AntSidebar } = Layout
+const { Sider: AntSidebar } = Layout;
 
-const Sidebar = () => {
+const sidebarList = [
+  {
+    key: "/",
+    label: "Dashboard",
+    icon: <BarChartOutlined style={{ fontSize: 20 }} />,
+  },
+  {
+    key: "/tasks",
+    label: "Tasks",
+    icon: <ScheduleOutlined style={{ fontSize: 20 }} />,
+  },
+];
+
+const Sidebar = ({ collapsed, setCollapsed }) => {
+  const navigate = useNavigate();
   return (
-    <AntSidebar className='sidebar' width={220}>
-      <div className='sidebar__logo'>TodoApp</div>
-
-      {/* Boards */}
-      <Menu mode='inline' defaultSelectedKeys={['1']} items={[]}>
-        {/* <Menu.SubMenu key='boards' icon={<ProjectOutlined />} title='Boards' }> */}
-      
-        {/* </Menu.SubMenu> */}
-
-        {/* Filters */}
-        {/* <Menu.SubMenu key='filters' icon={<FilterOutlined />} title='Filters' items={[]}> */}
-      
-        {/* </Menu.SubMenu> */}
-      </Menu>
-
-      {/* Add Task button */}
-      {/* <div className='sidebar__actions'>
-        <Button type='primary' icon={<PlusOutlined />} block>
-          Add Task
-        </Button>
-      </div> */}
+    <AntSidebar
+      className="sidebar"
+      width={260}
+      collapsed={collapsed}
+      onCollapse={setCollapsed}
+    >
+      <div className="sidebar__logo">
+        <CalendarOutlined
+          className={`sidebar__logo-icon ${collapsed ? "collapsed" : ""}`}
+        />
+        {!collapsed && "TodoApp"}
+      </div>
+      <Menu
+        theme="light"
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+        items={sidebarList}
+        onClick={(info) => {
+          navigate(info.key);
+        }}
+      />
     </AntSidebar>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
