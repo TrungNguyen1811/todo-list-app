@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
-import ListTask from './components/ListTask'
+import { useEffect } from "react";
+import ListTask from "./components/ListTask";
 
-import { useDispatch } from 'react-redux';
-import { getTasksRequest } from '../../sagas/task/taskSlice';
+import { useDispatch } from "react-redux";
+import { getTasksRequest } from "../../sagas/task/taskSlice";
 
-import NewTask from "@/pages/HomePage/components/NewTask";
+// import NewTask from "@/pages/HomePage/components/NewTask";
 
 function HomePage() {
   const dispatch = useDispatch();
