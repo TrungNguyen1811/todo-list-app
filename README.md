@@ -42,7 +42,6 @@ Clone repo và cài dependencies:
 - Merge nhiều commit thành 1 commit
 <img width="456" height="60" alt="image" src="https://github.com/user-attachments/assets/c3c74390-dbb6-4dfc-b27c-61c25c6f1a65" />
 
-
 - Structure commit:
 <img width="547" height="85" alt="image" src="https://github.com/user-attachments/assets/f123c718-a68b-4210-94c1-2145308c606e" />
 
