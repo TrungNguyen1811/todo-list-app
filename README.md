@@ -31,7 +31,8 @@ Clone repo và cài dependencies:
 
 
 - Flow
-<img width="403" height="258" alt="image" src="https://github.com/user-attachments/assets/2b389aee-6229-42d0-a36c-893c8a9c45ee" />
+<img width="768" height="336" alt="image" src="https://github.com/user-attachments/assets/8aeb0b42-f552-4139-9c7c-d4d55bdf3e46" />
+
 
 
 - Just 1 commit/ 1 PR
