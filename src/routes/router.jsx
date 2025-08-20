@@ -6,6 +6,7 @@ import HomeLayout from "../layouts/HomeLayout";
 import HomePage from "../pages/HomePage/HomePage";
 import { SignUp } from "../pages/SignUp/SignUp";
 import NotFound from "@/pages/NotFound";
+import Dashboard from "@/pages/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<div>Loading page...</div>}>
-            <HomePage />
+            <Dashboard />
           </Suspense>
         ),
       },

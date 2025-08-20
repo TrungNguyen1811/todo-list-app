@@ -7,7 +7,13 @@ function App() {
   return (
     <ConfigProvider
       theme={{
-        token: {},
+        cssVar: true,
+        token: {
+          colorPrimary: "#0463e8",
+          colorComplete: "#52c41a",
+          colorInProgress: "#faad14",
+          colorInComplete: "#f5222d",
+        },
       }}
     >
       <RouterProvider router={router} />

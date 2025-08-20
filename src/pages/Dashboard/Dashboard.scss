@@ -1,0 +1,65 @@
+.dashboard {
+  &-title.ant-typography {
+    margin-bottom: 0;
+    color: var(--ant-color-primary);
+  }
+  &-header {
+    background: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  &-content {
+    padding: 24px;
+  }
+  .today-progress {
+    text-align: center;
+    margin-bottom: 24px;
+    &__text {
+      display: block;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    &__stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+  }
+
+  .task-card {
+    max-height: 480px;
+    min-height: 100%;
+    overflow-y: auto;
+    .ant-card-body {
+      padding: 12px;
+      height: 100%;
+    }
+    &__empty {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      &-icon {
+        font-size: 48px;
+        color: #52c41a;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .task-list {
+    .task-item {
+      padding: 8px 12px;
+      .ant-list-item-meta {
+        display: flex;
+        align-items: center;
+      }
+      &__status {
+        &-tag {
+          font-size: 16px;
+          padding: 6px 8px;
+        }
+      }
+    }
+  }
+}
