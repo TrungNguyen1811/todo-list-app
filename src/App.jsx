@@ -7,12 +7,7 @@ function App() {
   return (
     <ConfigProvider
       theme={{
-        token: {
-          controlOutline: "none", // tắt outline focus
-          controlOutlineWidth: 0,
-          controlTmpOutline: "none",
-          colorBorder: "transparent", // border trong suốt
-        },
+        token: {},
       }}
     >
       <RouterProvider router={router} />
