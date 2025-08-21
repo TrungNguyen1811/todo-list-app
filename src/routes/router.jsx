@@ -28,6 +28,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: '/tasks',
+        element: (
+          <Suspense fallback={<div>Loading page...</div>}>
+            <HomePage />
+          </Suspense>
+        ),
+      },
     ],
   },
   {

@@ -6,6 +6,7 @@ import { getTasksRequest } from "../../sagas/task/taskSlice";
 
 import './HomePage.scss'
 import AddTask from '@/pages/HomePage/components/AddTask';
+import { KanbanBoard } from '@/components/DragAndDrop/KanBanBoard';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -19,7 +20,8 @@ function HomePage() {
         <h3>Task</h3>
         <AddTask /> 
       </div>
-      <ListTask />
+      <KanbanBoard />
+      {/* <ListTask /> */}
     </div>
   );
 }

@@ -18,6 +18,7 @@ import {
 } from './taskSlice'
 import TASK_API from '../../services/tasks'
 
+// get all to-do list
 function* handleGetTasks() {
   try {
     const getTasks = yield call(TASK_API.get)
@@ -27,6 +28,7 @@ function* handleGetTasks() {
   }
 }
 
+// get task by id
 function* handleGetTask() {
   try {
     const getTask = yield call(TASK_API.getTask)
