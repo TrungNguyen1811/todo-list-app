@@ -18,6 +18,7 @@ function* handleGetUsers() {
   try {
     const users = yield call(USERS_API.getAll);
     yield put(getUsersSuccess(users));
+    yield put(getUsersSuccess(true));
   } catch (error) {
     yield put(getUsersFailure(error.message));
   }
@@ -35,9 +36,7 @@ function* handleCreateUser(action) {
 function* handleSignIn(action) {
   try {
     const { username, password } = action.payload;
-
     const users = yield call(USERS_API.get);
-    console.log("Users fetched:", users);
 
     const matchedUser = users.find(
       (u) => u.username === username && u.password === password

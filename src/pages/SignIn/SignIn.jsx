@@ -1,12 +1,11 @@
-import { Input } from "antd";
-import { Button } from "antd";
+import { Button, Checkbox, Input } from "antd";
 import "./SignIn.scss";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signInRequest } from "@/sagas/users/userSlice";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import * as Yup from "yup";
 
 export function SignIn() {
   const dispatch = useDispatch();
@@ -18,9 +17,12 @@ export function SignIn() {
       username: "",
       password: "",
     },
+    validationSchema: Yup.object({
+      username: Yup.string().required("Username is required"),
+      password: Yup.string().required("Password is required"),
+    }),
     onSubmit: (values) => {
       dispatch(signInRequest(values));
-      console.log("Sign In values:", values);
     },
   });
 
@@ -28,6 +30,8 @@ export function SignIn() {
     if (user) {
       navigate("/");
     }
+
+    console.log("User state changed:", user);
   }, [user, navigate]);
 
   return (
@@ -43,6 +47,11 @@ export function SignIn() {
               value={handleSignIn.values.username}
               name="username"
             />
+            {handleSignIn.errors.username && handleSignIn.touched.username && (
+              <div className="error-message">
+                {handleSignIn.errors.username}
+              </div>
+            )}
           </div>
           <div>
             <Input
@@ -53,10 +62,14 @@ export function SignIn() {
               value={handleSignIn.values.password}
               name="password"
             />
+            {handleSignIn.errors.password && handleSignIn.touched.password && (
+              <div className="error-message">
+                {handleSignIn.errors.password}
+              </div>
+            )}
           </div>
           <div>
-            <input type="checkbox" id="remember-me" />
-            <label htmlFor="remember-me">Remember me</label>
+            <Checkbox>Remember me</Checkbox>
           </div>
           <Button disabled={loading} type="primary" htmlType="submit">
             {loading ? "Signing In..." : "Sign In"}
@@ -67,7 +80,7 @@ export function SignIn() {
         <section>
           <div className="social-login">
             Or, login with{" "}
-            <a href="#">
+            <Link to="#">
               <svg
                 width="26"
                 height="25"
@@ -92,8 +105,8 @@ export function SignIn() {
                   fill="#1976D2"
                 />
               </svg>
-            </a>{" "}
-            <a href="#">
+            </Link>{" "}
+            <Link to="#">
               <svg
                 width="28"
                 height="28"
@@ -110,8 +123,8 @@ export function SignIn() {
                   fill="white"
                 />
               </svg>
-            </a>
-            <a href="">
+            </Link>
+            <Link to="">
               <svg
                 width="29"
                 height="27"
@@ -124,14 +137,14 @@ export function SignIn() {
                   fill="black"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
           <p>
-            Don't have an account? <a href="/sign-up">Create One</a>
+            Don't have an account? <Link to="/sign-up">Create One</Link>
           </p>
         </section>
       </section>
-      <section>
+      <section className="hidden">
         <img src="/src/assets/images/sign-in/signin-banner.png" alt="" />
       </section>
     </div>
