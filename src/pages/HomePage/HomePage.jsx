@@ -4,9 +4,8 @@ import ListTask from "./components/ListTask";
 import { useDispatch } from "react-redux";
 import { getTasksRequest } from "../../sagas/task/taskSlice";
 
-import './HomePage.scss'
-import AddTask from '@/pages/HomePage/components/AddTask';
-import { KanbanBoard } from '@/components/DragAndDrop/KanBanBoard';
+import "./HomePage.scss";
+import AddTask from "@/pages/HomePage/components/AddTask";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -15,10 +14,10 @@ function HomePage() {
     dispatch(getTasksRequest());
   }, []);
   return (
-    <div className='home  '>
-      <div className='home__header'>
+    <div className="home  ">
+      <div className="home__header">
         <h3>Task</h3>
-        <AddTask /> 
+        <AddTask />
       </div>
       <KanbanBoard />
       {/* <ListTask /> */}
