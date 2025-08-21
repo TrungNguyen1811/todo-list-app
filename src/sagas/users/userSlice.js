@@ -10,6 +10,10 @@ const userSlice = createSlice({
     success: false,
   },
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+
     getUsersRequest: (state) => {
       state.loading = true;
     },

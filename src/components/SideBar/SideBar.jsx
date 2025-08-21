@@ -22,6 +22,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   const handleMenuClick = ({ key }) => {
     if (key === "signout") {
       dispatch(signOut());
+      localStorage.removeItem("user");
       navigate("/sign-in");
     } else {
       navigate(key);

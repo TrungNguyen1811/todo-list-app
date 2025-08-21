@@ -18,7 +18,6 @@ function* handleGetUsers() {
   try {
     const users = yield call(USERS_API.getAll);
     yield put(getUsersSuccess(users));
-    yield put(getUsersSuccess(true));
   } catch (error) {
     yield put(getUsersFailure(error.message));
   }
@@ -43,6 +42,7 @@ function* handleSignIn(action) {
     );
 
     if (matchedUser) {
+      localStorage.setItem("user", JSON.stringify(matchedUser));
       yield put(signInSuccess(matchedUser));
     } else {
       yield put(signInFailure("Incorrrect username or password"));
