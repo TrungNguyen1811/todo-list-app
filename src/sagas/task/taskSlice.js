@@ -49,19 +49,33 @@ const taskSlice = createSlice({
       state.error = action.payload
     },
 
-    //update task
-    updateTaskRequest: (state) => {
+    updateTaskRequest: (state, action) => {
       state.loading = true
+
+      const prevTask = state.list.find((t) => t.id === action.payload.id)
+      if (prevTask) {
+        action.meta = { prevTask }
+      }
+
+      // Cập nhật ngay trong state để UI phản hồi
+      state.list = state.list.map((t) =>
+        t.id === action.payload.id ? { ...t, ...action.payload } : t
+      )
     },
     updateTaskSuccess: (state, action) => {
       state.loading = false
-      state.list = state.list.map((task) =>
-        task.id === action.payload.id ? action.payload : task
+      state.list = state.list.map((t) =>
+        t.id === action.payload.id ? action.payload : t
       )
     },
     updateTaskFailure: (state, action) => {
       state.loading = false
       state.error = action.payload
+      if (action.meta?.prevTask) {
+        state.list = state.list.map((t) =>
+          t.id === action.meta.prevTask.id ? action.meta.prevTask : t
+        )
+      }
     },
 
     // deleteTask
