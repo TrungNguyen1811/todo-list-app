@@ -1,51 +1,36 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { useDndContext } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 import { TaskCard } from "./TaskCard";
-import { DragOutlined } from "@ant-design/icons";
-import { Button, Card } from "antd";
+import { Card } from "antd";
 
 import "./Board.scss"; 
 
-export function BoardColumn({ column, tasks, isOverlay }) {
+export function BoardColumn({ column, tasks, }) {
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
+  const sortedTasks = tasks.slice().sort((a, b) => a.index - b.index);
 
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } =
+
+  const { setNodeRef} =
     useSortable({
       id: column.id,
       data: { type: "Column", column },
       attributes: { roleDescription: `Column: ${column.title}` },
     });
 
-  const style = {
-    transition,
-    transform: CSS.Translate.toString(transform),
-  };
 
   return (
     <Card
       ref={setNodeRef}
-      style={style}
-      className={`board-column ${
-        isOverlay ? "drag-overlay" : isDragging ? "drag-over" : ""
-      }`}
+      className={`board-column`}
     >
       <div className="board-column-header">
-        <Button
-          {...attributes}
-          {...listeners}
-          className="drag-button"
-        >
-          <span className="sr-only">{`Move column: ${column.title}`}</span>
-          <DragOutlined />
-        </Button>
         <span className="title">{column.title}</span>
       </div>
 
       <div className="board-tasks">
         <SortableContext items={tasksIds}>
-          {tasks.map((task) => (
+          {sortedTasks.map((task) => (
             <TaskCard key={task.id} task={task} />
           ))}
         </SortableContext>

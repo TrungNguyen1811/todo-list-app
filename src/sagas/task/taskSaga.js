@@ -50,6 +50,7 @@ function* handleAddTask(action) {
 function* handleUpdateTask(action) {
   try {
     const newTask = yield call(TASK_API.put, action.payload)
+    console.log(newTask)
     yield put(updateTaskSuccess(newTask))
   } catch (error) {
     yield put(updateTaskFailure(error.message))

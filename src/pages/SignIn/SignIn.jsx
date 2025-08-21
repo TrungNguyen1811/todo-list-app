@@ -20,7 +20,6 @@ export function SignIn() {
     },
     onSubmit: (values) => {
       dispatch(signInRequest(values));
-      console.log("Sign In values:", values);
     },
   });
 

@@ -17,10 +17,7 @@ export function TaskCard({ task, isOverlay }) {
     data: {
       type: "Task",
       task,
-    },
-    attributes: {
-      roleDescription: "Task",
-    },
+    }
   })
 
   const style = {
@@ -28,11 +25,10 @@ export function TaskCard({ task, isOverlay }) {
     transform: CSS.Translate.toString(transform),
   }
 
-  // set className theo trạng thái drag
   let cardClass = "task-card"
   if (isOverlay) cardClass += " drag-overlay"
   else if (isDragging) cardClass += " drag-over"
-  console.log('task', task)
+
   return (
     <Card ref={setNodeRef} style={style} className={cardClass}>
       <div className="task-card__header">

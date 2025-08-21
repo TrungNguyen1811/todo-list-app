@@ -23,6 +23,7 @@ const TASK_API = {
       description: task.description,
       status: task.status,
       priority: task.priority,
+      index: task.index,
     })
     return res.data
   },
