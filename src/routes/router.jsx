@@ -8,12 +8,15 @@ import { SignUp } from "../pages/SignUp/SignUp";
 import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/Dashboard";
 import { SignIn } from "@/pages/SignIn/SignIn";
+import ProtectedRoute from "./protectedRoute";
 
 const router = createBrowserRouter([
   {
     element: (
       <Suspense fallback={<div>Loading layout...</div>}>
-        <HomeLayout />
+        <ProtectedRoute>
+          <HomeLayout />
+        </ProtectedRoute>
       </Suspense>
     ),
     children: [
