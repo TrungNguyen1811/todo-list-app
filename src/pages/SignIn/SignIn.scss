@@ -29,3 +29,13 @@
   gap: 10px;
   align-items: center;
 }
+
+@media screen and (max-width: 768px) {
+  .sign-in-section {
+    grid-template-columns: 1fr;
+  }
+
+  .hidden {
+    display: none;
+  }
+}
