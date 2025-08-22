@@ -1,30 +1,34 @@
 import { Button, Checkbox, Input } from "antd";
 import "./SignIn.scss";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { signInRequest } from "@/sagas/users/userSlice";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import * as Yup from "yup";
+import { Form } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+
+const initialValues = {
+  username: "",
+  password: "",
+};
+
+const validationSchema = Yup.object({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
 
 export function SignIn() {
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  const handleSignIn = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      username: Yup.string().required("Username is required"),
-      password: Yup.string().required("Password is required"),
-    }),
-    onSubmit: (values) => {
-      dispatch(signInRequest(values));
-    },
-  });
+  const handleSubmitSignIn = (values) => {
+    dispatch(signInRequest(values));
+  };
 
   useEffect(() => {
     if (user) {
@@ -36,48 +40,80 @@ export function SignIn() {
     return (
       <div className="sign-in-section container">
         <section className="form-container">
-          <h1>Sign In </h1>
-          <form className="form-signin" onSubmit={handleSignIn.handleSubmit}>
-            <div>
-              <Input
-                size="large"
-                placeholder="Enter your username"
-                onChange={handleSignIn.handleChange}
-                value={handleSignIn.values.username}
-                name="username"
-              />
-              {handleSignIn.errors.username &&
-                handleSignIn.touched.username && (
-                  <div className="error-message">
-                    {handleSignIn.errors.username}
-                  </div>
-                )}
-            </div>
-            <div>
-              <Input
-                size="large"
-                placeholder="Enter your password"
-                type="password"
-                onChange={handleSignIn.handleChange}
-                value={handleSignIn.values.password}
-                name="password"
-              />
-              {handleSignIn.errors.password &&
-                handleSignIn.touched.password && (
-                  <div className="error-message">
-                    {handleSignIn.errors.password}
-                  </div>
-                )}
-            </div>
-            <div>
-              <Checkbox>Remember me</Checkbox>
-            </div>
-            <Button disabled={loading} type="primary" htmlType="submit">
-              {loading ? "Signing In..." : "Sign In"}
-            </Button>
-
-            {error && <div className="error-message">{error}</div>}
-          </form>
+          <h1>Sign In</h1>
+          <Formik
+            className="form-signin"
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmitSignIn}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              errors,
+              touched,
+              setFieldValue,
+            }) => (
+              <Form onFinish={handleSubmit}>
+                <Form.Item>
+                  <Input
+                    size="large"
+                    name="username"
+                    placeholder="Enter your username"
+                    prefix={<UserOutlined />}
+                    value={values.username}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="username"
+                    status={
+                      touched.username && errors.username ? "error" : undefined
+                    }
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Input.Password
+                    size="large"
+                    name="password"
+                    placeholder="Enter your password"
+                    prefix={<LockOutlined />}
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="current-password"
+                    status={
+                      touched.password && errors.password ? "error" : undefined
+                    }
+                  />
+                </Form.Item>
+                {error && <div className="error-message">{error}</div>}
+                <Form.Item>
+                  <Checkbox
+                    checked={values.remember}
+                    onChange={(e) =>
+                      setFieldValue("remember", e.target.checked)
+                    }
+                    onBlur={handleBlur}
+                  >
+                    Remember me
+                  </Checkbox>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    size="large"
+                    block
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    {loading ? "Signing In..." : "Sign In"}
+                  </Button>
+                </Form.Item>
+              </Form>
+            )}
+          </Formik>
           <section>
             <div className="social-login">
               Or, login with{" "}
