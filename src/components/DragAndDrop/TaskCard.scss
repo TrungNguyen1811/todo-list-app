@@ -1,0 +1,80 @@
+@use '../../styles/variables' as *;
+
+.task-card {
+  // Base styles for the card
+
+  &--dragging {
+    outline: 2px solid currentColor;
+    opacity: 0.3;
+  }
+
+  &--overlay {
+    outline: 2px solid $color-primary;
+  }
+
+  &__header {
+    padding: 0 0.75rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+
+    &--priority {
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  }
+
+  &__drag-handle {
+    padding: 0.25rem;
+    color: rgba($color-text-dark, 0.5);
+    margin-left: -0.5rem;
+    height: auto;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+      color: rgba($color-text-dark, 0.8);
+    }
+    & .ant-card-body {
+      border-radius: 8px;
+    }
+  }
+
+  &__badge {
+    margin-left: auto;
+    font-weight: 600;
+  }
+
+  &__content {
+    padding: 0 0.75rem;
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0rem;
+  }
+
+  &__description {
+    font-size: 1.4rem;
+    margin-bottom: 1.6rem;
+  }
+
+  &__time {
+    text-align: end;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+  }
+}

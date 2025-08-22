@@ -3,13 +3,13 @@ import { createBrowserRouter } from 'react-router-dom'
 
 // Lazy load component
 import HomeLayout from '../layouts/HomeLayout'
-import HomePage from '../pages/HomePage/HomePage'
 import { SignUp } from '../pages/SignUp/SignUp'
 import NotFound from '@/pages/NotFound'
 import Dashboard from '@/pages/Dashboard'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import Priority from '@/pages/Priority'
 import ProtectedRoute from './protectedRoute'
+import TaskPage from '@/pages/TaskPage'
 
 const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         path: '/tasks',
         element: (
           <Suspense fallback={<div>Loading page...</div>}>
-            <HomePage />
+            <TaskPage />
           </Suspense>
         ),
       },
