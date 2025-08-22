@@ -15,6 +15,14 @@ function App() {
           colorInProgress: '#faad14',
           colorInComplete: '#f5222d',
         },
+        components: {
+          Menu: {
+            itemHeight: 48,
+            itemPaddingInline: 24,
+            fontSize: 16,
+            iconSize: 18,
+          },
+        },
       }}
     >
       <RouterProvider router={router} />

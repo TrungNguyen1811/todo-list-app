@@ -1,15 +1,18 @@
-import { Button, Layout } from "antd";
+import { Button, Layout } from 'antd'
 
-import "./Header.scss";
-import Navbar from "@/components/Navbar/Navbar";
-import { Flex } from "antd";
-import { Typography } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
-import { Input } from "antd";
+import './Header.scss'
+import { Flex } from 'antd'
+import { Typography } from 'antd'
+import {
+  CalendarOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from '@ant-design/icons'
 
-const { Header: AntHeader } = Layout;
-const { Text } = Typography;
+import { Popover } from 'antd'
+import { Calendar } from 'antd'
+
+const { Header: AntHeader } = Layout
 
 function Header({ collapsed, setCollapsed }) {
   return (
@@ -18,7 +21,7 @@ function Header({ collapsed, setCollapsed }) {
         align="center"
         gap="middle"
         justify="space-between"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <Button
           type="default"
@@ -26,28 +29,36 @@ function Header({ collapsed, setCollapsed }) {
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={() => setCollapsed(!collapsed)}
         />
-        <Flex align="center" gap={8} justify="start">
-          <Flex justify="center" align="center" gap={8}>
-            <Flex vertical>
-              <Typography.Text>
-                {new Date().toLocaleString("en-US", { weekday: "long" })}
-              </Typography.Text>
-              <Typography.Text strong style={{ color: "#3e3232" }}>
-                {new Date().toLocaleDateString()}
-              </Typography.Text>
+        <Flex align="center" gap="middle">
+          <Popover
+            content={
+              <div className="wrapper__calendar">
+                <Calendar fullscreen={false} />
+              </div>
+            }
+            trigger="hover"
+            placement="bottomLeft"
+          >
+            <Button type="default" size="large">
+              <CalendarOutlined style={{ fontSize: 20 }} />
+            </Button>
+          </Popover>
+          <Flex align="center" gap={8} justify="start">
+            <Flex justify="center" align="center" gap={8}>
+              <Flex vertical>
+                <Typography.Text strong>
+                  {new Date().toLocaleString('en-US', { weekday: 'long' })}
+                </Typography.Text>
+                <Typography.Text strong style={{ color: '#ef1e56' }}>
+                  {new Date().toLocaleDateString()}
+                </Typography.Text>
+              </Flex>
             </Flex>
-            <Avatar
-              style={{ backgroundColor: "#ff6867", verticalAlign: "middle" }}
-              size="large"
-              gap={10}
-            >
-              {"Đ"}
-            </Avatar>
           </Flex>
         </Flex>
       </Flex>
     </AntHeader>
-  );
+  )
 }
 
-export default Header;
+export default Header
