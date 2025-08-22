@@ -1,13 +1,12 @@
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import "./SignUp.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { createUserRequest, resetUserState } from "@/sagas/users/userSlice";
-import { Input, message, Button } from "antd";
+import { Input, Button, Checkbox, Form } from "antd";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Checkbox } from "antd";
 
 const fields = [
   {
@@ -51,73 +50,38 @@ const validationSchema = Yup.object({
   terms: Yup.boolean().oneOf([true], "You must accept the Terms"),
 });
 
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  terms: false,
+};
+
 export function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, success, error } = useSelector((state) => state.user);
 
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      terms: false,
-    },
-    validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      const { confirmPassword, terms, ...userData } = values;
-      dispatch(createUserRequest(userData));
-      resetForm();
-    },
-  });
-
   useEffect(() => {
     if (success) {
-      messageApi.success("Create User Successfully!");
-
       setTimeout(() => {
         navigate("/sign-in");
-
         dispatch(resetUserState());
       }, 2000);
     }
-    if (error) {
-      messageApi.error(`Error: ${error}`);
-    }
-  }, [success, error, messageApi, navigate, dispatch]);
+  }, [success, error, navigate, dispatch]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetUserState());
-    };
-  }, [dispatch]);
-
-  const renderField = ({ name, placeholder, type = "text", icon }) => (
-    <div key={name}>
-      <div>
-        <Input
-          type={type}
-          size={"large"}
-          placeholder={placeholder}
-          {...formik.getFieldProps(name)}
-          prefix={icon}
-        />
-      </div>
-      {formik.touched[name] && formik.errors[name] && (
-        <span className="error-message">{formik.errors[name]}</span>
-      )}
-    </div>
-  );
+  const handleSubmitSignUp = (values, { resetForm }) => {
+    const { confirmPassword, terms, ...userData } = values;
+    dispatch(createUserRequest(userData));
+    resetForm();
+  };
 
   return (
     <div className="sign-up-page container">
-      {contextHolder}
-
       <section className="hidden">
         <img
           src="/src/assets/images/sign-up/sign-up.png"
@@ -126,40 +90,98 @@ export function SignUp() {
       </section>
       <section className="form-section">
         <h1>Sign Up</h1>
-        <form className="form-sign-up" onSubmit={formik.handleSubmit}>
-          {fields.map(renderField)}
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmitSignUp}
+        >
+          {({
+            errors,
+            touched,
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            setFieldValue,
+          }) => (
+            <Form onFinish={handleSubmit}>
+              {fields.map((field) => {
+                const InputComponent =
+                  field.type === "password" ? Input.Password : Input;
 
-          <div className="checkbox-group">
-            <Checkbox
-              {...formik.getFieldProps("terms")}
-              checked={formik.values.terms}
-            >
-              I agree to the <Link to="#">Terms and Conditions</Link>
-            </Checkbox>
-          </div>
-          {formik.touched.terms && formik.errors.terms && (
-            <span className="error-message">{formik.errors.terms}</span>
+                return (
+                  <Form.Item
+                    key={field.name}
+                    validateStatus={
+                      touched[field.name] && errors[field.name] ? "error" : ""
+                    }
+                    help={
+                      touched[field.name] && errors[field.name]
+                        ? errors[field.name]
+                        : ""
+                    }
+                    style={{ marginBottom: "16px" }}
+                  >
+                    <InputComponent
+                      name={field.name}
+                      type={field.type}
+                      size="large"
+                      placeholder={field.placeholder}
+                      prefix={field.icon}
+                      value={values[field.name]}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      status={
+                        touched[field.name] && errors[field.name] ? "error" : ""
+                      }
+                    />
+                  </Form.Item>
+                );
+              })}
+
+              <Form.Item
+                validateStatus={touched.terms && errors.terms ? "error" : ""}
+                help={touched.terms && errors.terms ? errors.terms : ""}
+                style={{ marginBottom: "16px" }}
+              >
+                <Checkbox
+                  name="terms"
+                  checked={values.terms}
+                  onChange={(e) => setFieldValue("terms", e.target.checked)}
+                  onBlur={handleBlur}
+                >
+                  I agree to the <Link to="#">Terms and Conditions</Link>
+                </Checkbox>
+              </Form.Item>
+
+              {error && (
+                <div
+                  className="error-message"
+                  style={{ color: "#ff4d4f", marginBottom: "16px" }}
+                >
+                  <p>{error}</p>
+                </div>
+              )}
+
+              <Form.Item style={{ marginBottom: "16px" }}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  disabled={loading}
+                  loading={loading}
+                  block
+                  size="large"
+                >
+                  {loading ? "Submitting..." : "Sign Up"}
+                </Button>
+              </Form.Item>
+
+              <div>
+                Already have an account? <Link to="/sign-in">Sign In</Link>
+              </div>
+            </Form>
           )}
-
-          {error && (
-            <div className="error-message">
-              <p>{error}</p>
-            </div>
-          )}
-
-          <Button
-            htmlType="submit"
-            type="primary"
-            disabled={loading}
-            loading={loading}
-          >
-            {loading ? "Submitting..." : "Sign Up"}
-          </Button>
-
-          <div>
-            Already have an account? <Link to="/sign-in">Sign In</Link>
-          </div>
-        </form>
+        </Formik>
       </section>
     </div>
   );

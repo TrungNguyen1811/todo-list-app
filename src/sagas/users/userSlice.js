@@ -4,7 +4,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     listUser: [],
-    user: null,
+    user: localStorage.getItem("user") ?? null,
     loading: false,
     error: null,
     success: false,
