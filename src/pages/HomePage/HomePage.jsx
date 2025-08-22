@@ -19,7 +19,7 @@ function HomePage() {
         <h3>Task</h3>
         <AddTask />
       </div>
-      <KanbanBoard />
+      {/* <KanbanBoard /> */}
       {/* <ListTask /> */}
     </div>
   );
