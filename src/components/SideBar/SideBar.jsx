@@ -3,6 +3,7 @@ import { Layout, Menu } from "antd";
 import {
   BarChartOutlined,
   CalendarOutlined,
+  PicLeftOutlined,
   LogoutOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
@@ -40,6 +41,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       label: "Tasks",
       icon: <ScheduleOutlined style={{ fontSize: 20 }} />,
     },
+      {
+          key: "/priority",
+          label: "Priority",
+          icon: <PicLeftOutlined style={{ fontSize: 20 }} />,
+      },
     {
       type: "divider",
     },
