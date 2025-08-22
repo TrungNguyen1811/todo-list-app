@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Layout,
   Card,
@@ -10,7 +10,7 @@ import {
   Col,
   Statistic,
   Typography,
-} from "antd";
+} from 'antd'
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -19,72 +19,70 @@ import {
   BarChartOutlined,
   FireOutlined,
   MinusCircleOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons'
 
-import "./Dashboard.scss";
-import { Flex } from "antd";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { getTasksRequest } from "@/sagas/task/taskSlice";
-import { PRIORITY_COLOR, STATUS_COLOR, STATUS_TEXT } from "@/constants/status";
-import { useMemo } from "react";
-import { Spin } from "antd";
-import { theme } from "antd";
-import { Empty } from "antd";
-const { Content } = Layout;
-const { Title, Text } = Typography;
+import './Dashboard.scss'
+import { Flex } from 'antd'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { getTasksRequest } from '@/sagas/task/taskSlice'
+import { PRIORITY_COLOR, STATUS_COLOR, STATUS_TEXT } from '@/constants/status'
+import { useMemo } from 'react'
+import { Spin } from 'antd'
+import { theme } from 'antd'
+import { Empty } from 'antd'
+const { Content } = Layout
+const { Title, Text } = Typography
 
 const Dashboard = () => {
-  const { list: tasks, loading } = useSelector((state) => state.task);
-  const dispatch = useDispatch();
+  const { list: tasks, loading } = useSelector((state) => state.task)
+  const dispatch = useDispatch()
   const {
     token: { colorComplete, colorInProgress, colorInComplete },
-  } = theme.useToken();
+  } = theme.useToken()
   useEffect(() => {
-    dispatch(getTasksRequest());
-  }, [dispatch]);
+    dispatch(getTasksRequest())
+  }, [dispatch])
 
   const { todayTasks, allStats } = useMemo(() => {
     const todayTasks = tasks.filter((task) => {
-      const today = new Date().toLocaleDateString();
+      const today = new Date().toLocaleDateString()
       return (
         task?.createdAt &&
         new Date(task.createdAt).toLocaleDateString() === today
-      );
-    });
+      )
+    })
 
-    const total = tasks.length;
-    const completed = tasks.filter(
-      (task) => task.status === "completed"
-    ).length;
+    const total = tasks.length
+    const completed = tasks.filter((task) => task.status === 'completed').length
     const inProgress = tasks.filter(
-      (task) => task.status === "inprogress"
-    ).length;
+      (task) => task.status === 'inprogress'
+    ).length
     const inComplete = tasks.filter(
-      (task) => task.status === "incomplete"
-    ).length;
+      (task) => task.status === 'incomplete'
+    ).length
     const overdue = tasks.filter(
       (task) =>
-        new Date(task.dueDate) < new Date() && task.status !== "completed"
-    ).length;
+        new Date(task.dueDate) < new Date() && task.status !== 'completed'
+    ).length
 
-    const allStats = { total, completed, inProgress, inComplete, overdue };
+    const allStats = { total, completed, inProgress, inComplete, overdue }
 
-    return { todayTasks, allStats };
-  }, [tasks]);
+    return { todayTasks, allStats }
+  }, [tasks])
 
   const todayStats = useMemo(() => {
-    const total = todayTasks.length;
+    const total = todayTasks.length
     const completed = todayTasks.filter(
-      (task) => task.status === "completed"
-    ).length;
+      (task) => task.status === 'completed'
+    ).length
     const inProgress = todayTasks.filter(
-      (task) => task.status === "inprogress"
-    ).length;
+      (task) => task.status === 'inprogress'
+    ).length
     const inComplete = todayTasks.filter(
-      (task) => task.status === "incomplete"
-    ).length;
+      (task) => task.status === 'incomplete'
+    ).length
     return {
       total,
       completed,
@@ -93,10 +91,10 @@ const Dashboard = () => {
       completedPercent: total > 0 ? Math.round((completed / total) * 100) : 0,
       inProgressPercent: total > 0 ? Math.round((inProgress / total) * 100) : 0,
       inCompletePercent: total > 0 ? Math.round((inComplete / total) * 100) : 0,
-    };
-  }, [todayTasks]);
+    }
+  }, [todayTasks])
   return (
-    <Layout style={{ minHeight: "100vh" }} className="dashboard">
+    <Layout style={{ minHeight: '100vh' }} className="dashboard">
       <Flex className="dashboard-header">
         <Title level={2} className="dashboard-title">
           <Space>
@@ -107,14 +105,14 @@ const Dashboard = () => {
       </Flex>
       <Spin size="default" spinning={loading}>
         <Content className="dashboard-content">
-          <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
+          <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
             <Col xs={24} sm={12} md={6} lg={6}>
               <Card>
                 <Statistic
                   title="Total Tasks"
                   value={allStats.total}
                   prefix={<BarChartOutlined />}
-                  valueStyle={{ color: "#1890ff", fontWeight: "bold" }}
+                  valueStyle={{ color: '#1890ff', fontWeight: 'bold' }}
                   suffix="tasks"
                 />
               </Card>
@@ -125,7 +123,7 @@ const Dashboard = () => {
                   title="Completed"
                   value={allStats.completed}
                   prefix={<CheckCircleOutlined />}
-                  valueStyle={{ color: colorComplete, fontWeight: "bold" }}
+                  valueStyle={{ color: colorComplete, fontWeight: 'bold' }}
                   suffix="tasks"
                 />
               </Card>
@@ -136,7 +134,7 @@ const Dashboard = () => {
                   title="In Complete"
                   value={allStats.inComplete}
                   prefix={<MinusCircleOutlined />}
-                  valueStyle={{ color: colorInComplete, fontWeight: "bold" }}
+                  valueStyle={{ color: colorInComplete, fontWeight: 'bold' }}
                   suffix="tasks"
                 />
               </Card>
@@ -147,7 +145,7 @@ const Dashboard = () => {
                   title="In Progress"
                   value={allStats.inProgress}
                   prefix={<ClockCircleOutlined />}
-                  valueStyle={{ color: colorInProgress, fontWeight: "bold" }}
+                  valueStyle={{ color: colorInProgress, fontWeight: 'bold' }}
                   suffix="tasks"
                 />
               </Card>
@@ -163,7 +161,7 @@ const Dashboard = () => {
                     Today's Progress
                   </Space>
                 }
-                style={{ height: "100%" }}
+                style={{ height: '100%' }}
               >
                 <div className="today-progress">
                   <Progress
@@ -178,7 +176,7 @@ const Dashboard = () => {
                   </Text>
                 </div>
 
-                <Space direction="vertical" style={{ width: "100%" }}>
+                <Space direction="vertical" style={{ width: '100%' }}>
                   <div>
                     <div className="today-progress__stat">
                       <Text>Completed</Text>
@@ -242,11 +240,11 @@ const Dashboard = () => {
                           avatar={
                             <Tag
                               className="task-item__status-tag"
-                              color={STATUS_COLOR?.[task.status] || "default"}
+                              color={STATUS_COLOR?.[task.status] || 'default'}
                               icon={
-                                task.status === "completed" ? (
+                                task.status === 'completed' ? (
                                   <CheckCircleOutlined className="task-item__status-icon" />
-                                ) : task.status === "inprogress" ? (
+                                ) : task.status === 'inprogress' ? (
                                   <ClockCircleOutlined classID="task-item__status-icon" />
                                 ) : (
                                   <ExclamationCircleOutlined className="task-item__status-icon" />
@@ -258,34 +256,31 @@ const Dashboard = () => {
                             <Flex gap={6}>
                               <Text
                                 style={{
-                                  fontSize: "14px",
+                                  fontSize: '14px',
                                   textDecoration:
-                                    task.status === "completed"
-                                      ? "line-through"
-                                      : "none",
+                                    task.status === 'completed'
+                                      ? 'line-through'
+                                      : 'none',
                                   opacity:
-                                    task.status === "completed" ? 0.6 : 1,
+                                    task.status === 'completed' ? 0.6 : 1,
                                 }}
                                 ellipsis={{ tooltip: task.title }}
                               >
-                                {task.title}
+                                {task?.title}
                               </Text>
-                              <Tag
-                                color={
-                                  PRIORITY_COLOR?.[task.priority] || "default"
-                                }
-                              >
-                                {task.priority.toUpperCase()}
+                              <Tag color={task?.priorities?.color || 'default'}>
+                                {task?.priorities?.name &&
+                                  task.priorities.name.toUpperCase()}
                               </Tag>
                               <Tag
                                 size="small"
-                                color={STATUS_COLOR?.[task.status] || "default"}
+                                color={STATUS_COLOR?.[task.status] || 'default'}
                               >
                                 {STATUS_TEXT?.[task.status] || task.status}
                               </Tag>
                             </Flex>
                           }
-                          description={<Text>{task.description}</Text>}
+                          description={<Text>{task?.description}</Text>}
                         />
                       </List.Item>
                     )}
@@ -297,7 +292,7 @@ const Dashboard = () => {
         </Content>
       </Spin>
     </Layout>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
