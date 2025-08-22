@@ -11,9 +11,15 @@ const TASK_API = {
     return res.data
   },
 
-  post: async (data) => {
-    delete data['id']
-    const res = await instance.post(`/todos`, { ...data })
+  post: async (task) => {
+    const res = await instance.post(`/todos`, {
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priorityId: task.priorityId,
+      index: task.index,
+      userId: task.userId,
+    })
     return res.data
   },
 
@@ -22,8 +28,9 @@ const TASK_API = {
       title: task.title,
       description: task.description,
       status: task.status,
-      priority: task.priority,
+      priorityId: task.priorityId,
       index: task.index,
+      userId: task.userId,
     })
     return res.data
   },

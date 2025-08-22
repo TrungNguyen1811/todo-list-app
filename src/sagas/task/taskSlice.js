@@ -8,6 +8,7 @@ const taskSlice = createSlice({
     task: null,
     loading: false,
     error: null,
+    actionLoading: false,
   },
   reducers: {
     // get task lists
@@ -26,6 +27,7 @@ const taskSlice = createSlice({
     // get task
     getTaskRequest: (state) => {
       state.loading = true
+      state.error = null
     },
     getTaskSuccess: (state, action) => {
       state.loading = false
@@ -38,41 +40,45 @@ const taskSlice = createSlice({
 
     // add task
     addTaskRequest: (state) => {
-      state.loading = true
+      state.actionLoading = true
     },
-    addTaskSuccess: (state, action) => {
-      state.loading = false
-      state.list.push(action.payload)
+    addTaskSuccess: (state) => {
+      state.actionLoading = false
     },
     addTaskFailure: (state, action) => {
-      state.loading = false
+      state.actionLoading = false
       state.error = action.payload
     },
 
-    updateTaskRequest: (state, action) => {
-      state.loading = true
+    updateTaskRequest: (state) => {
+      state.actionLoading = true
     },
     updateTaskSuccess: (state, action) => {
-      state.loading = false
-      state.list = state.list.map((t) =>
-        t.id === action.payload.id ? action.payload : t
-      )
+      state.actionLoading = false
+      const updated = action.payload
+      if (!updated) return
+      const indexInList = state.list.findIndex((t) => t.id === updated.id)
+      if (indexInList !== -1) {
+        state.list[indexInList] = updated
+      }
+      if (state.task && state.task.id === updated.id) {
+        state.task = updated
+      }
     },
     updateTaskFailure: (state, action) => {
-      state.loading = false
+      state.actionLoading = false
       state.error = action.payload
     },
 
     // deleteTask
     deleteTaskRequest: (state) => {
-      state.loading = true
+      state.actionLoading = true
     },
-    deleteTaskSuccess: (state, action) => {
-      state.loading = false
-      state.list = state.list.filter((task) => task.id !== action.payload.id)
+    deleteTaskSuccess: (state) => {
+      state.actionLoading = false
     },
     deleteTaskFailure: (state, action) => {
-      state.loading = false
+      state.actionLoading = false
       state.error = action.payload
     },
   },
@@ -94,5 +100,6 @@ export const {
   deleteTaskRequest,
   deleteTaskSuccess,
   deleteTaskFailure,
+  clearError,
 } = taskSlice.actions
 export default taskSlice.reducer

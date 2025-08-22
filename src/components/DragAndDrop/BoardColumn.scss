@@ -1,0 +1,110 @@
+@use '../../styles/variables' as *;
+
+.board-column {
+  width: 350px;
+  max-width: 100%;
+  // background-color: $color-bg-light;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-x: auto;
+
+  &--default {
+    border: 2px solid transparent;
+  }
+
+  &--dragging {
+    outline: 2px solid currentColor;
+    opacity: 0.3;
+  }
+
+  &--overlay {
+    outline: 2px solid $color-primary;
+  }
+
+  &__header {
+    padding: 1rem;
+    padding-top: 0;
+    font-weight: 600;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__drag-handle {
+    padding: 0.25rem;
+    color: rgba($color-primary, 0.5);
+    margin-left: -0.5rem;
+    height: auto;
+    cursor: grab;
+    position: relative;
+
+    &:hover {
+      color: rgba($color-primary, 0.8);
+    }
+  }
+
+  &__title {
+    // margin-left: auto;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  &__scroll-area {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__content {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 1.4rem;
+    padding: 0.75rem;
+
+    .ant-card-body {
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+.board-container {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  .ant-card {
+    background-color: #e9ecef;
+  }
+
+  @media (min-width: $bp-medium) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &--default {
+    scroll-snap-type: x mandatory;
+  }
+
+  &--active {
+    scroll-snap-type: none;
+  }
+
+  &__inner {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: max-content;
+    padding: 0.5rem;
+  }
+}
