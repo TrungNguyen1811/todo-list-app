@@ -13,6 +13,7 @@ import {
 } from "./userSlice";
 
 import USERS_API from "@/services/users";
+import { showMessage } from "../appMessage/appMessageSlice";
 
 function* handleGetUsers() {
   try {
@@ -27,8 +28,10 @@ function* handleCreateUser(action) {
   try {
     const newUser = yield call(USERS_API.post, action.payload);
     yield put(createUserSuccess(newUser));
+    yield put(showMessage.success("Create User Successfully"));
   } catch (error) {
     yield put(createUserFailure(error.message));
+    yield put(showMessage.error(`Error: ${error.message}`));
   }
 }
 
@@ -37,7 +40,6 @@ function* handleSignIn(action) {
     const { username, password } = action.payload;
 
     const users = yield call(USERS_API.get);
-    console.log("Users fetched:", users);
 
     const matchedUser = users.find(
       (u) => u.username === username && u.password === password
