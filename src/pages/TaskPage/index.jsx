@@ -1,28 +1,36 @@
-import React from 'react'
-import { Layout, Space, Typography, Button } from 'antd'
-import { PicLeftOutlined, PlusOutlined } from '@ant-design/icons'
+import React from "react";
+import { Layout, Space, Typography, Button } from "antd";
+import { PicLeftOutlined, PlusOutlined } from "@ant-design/icons";
 
-import { Flex } from 'antd'
-import { KanbanBoard } from '@/components/DragAndDrop/KanBanBoard'
-import useTasks from '@/hooks/useTasks'
-const { Content } = Layout
-const { Title } = Typography
+import { Flex } from "antd";
+import { KanbanBoard } from "@/components/DragAndDrop/KanBanBoard";
+import useTasks from "@/hooks/useTasks";
+const { Content } = Layout;
+const { Title } = Typography;
 
-import ModalTask from '@/pages/TaskPage/components/ModalTask'
-import { CardStyled } from '@/pages/TaskPage/styled'
-import { useEffect } from 'react'
-import { getPrioritiesRequest } from '@/sagas/priorities/prioritiesSlice'
-import { useDispatch } from 'react-redux'
+import ModalTask from "@/pages/TaskPage/components/ModalTask";
+import { CardStyled } from "@/pages/TaskPage/styled";
+import { useEffect } from "react";
+import { getPrioritiesRequest } from "@/sagas/priorities/prioritiesSlice";
+import { useDispatch } from "react-redux";
 
 const TaskPage = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const initialFunction = () => {
-    dispatch(getPrioritiesRequest())
-  }
+    dispatch(getPrioritiesRequest());
+  };
   useEffect(() => {
-    initialFunction()
-  }, [])
-  const { openModalAddTask, openModalUpdateTask, cancelModalTask, isModalVisible, editingTask, formikRef, visibleModalTask } = useTasks()
+    initialFunction();
+  }, []);
+  const {
+    openModalAddTask,
+    openModalUpdateTask,
+    cancelModalTask,
+    isModalVisible,
+    editingTask,
+    formikRef,
+    visibleModalTask,
+  } = useTasks();
 
   return (
     <Layout style={{ minHeight: "100vh" }} className="dashboard">
@@ -37,13 +45,13 @@ const TaskPage = () => {
 
       <Content>
         <CardStyled
-          title='Task List'
+          title="Task List"
           extra={
             <Button
-              type='primary'
+              type="primary"
               icon={<PlusOutlined />}
               onClick={openModalAddTask}
-              size='middle'
+              size="middle"
             >
               Add Task
             </Button>
@@ -61,7 +69,7 @@ const TaskPage = () => {
         setIsModalVisible={visibleModalTask}
       />
     </Layout>
-  )
-}
+  );
+};
 
-export default TaskPage
+export default TaskPage;
