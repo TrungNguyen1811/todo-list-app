@@ -1,40 +1,32 @@
-import { Button, Checkbox, Input } from "antd";
-import "./SignIn.scss";
-import { Formik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import { signInRequest } from "@/sagas/users/userSlice";
-import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import * as Yup from "yup";
-import { Form } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Input } from 'antd'
+import './SignIn.scss'
+import { Formik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
+import { signInRequest } from '@/sagas/users/userSlice'
+import * as Yup from 'yup'
+import { Form } from 'antd'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
 const initialValues = {
-  username: "",
-  password: "",
-};
+  username: '',
+  password: '',
+}
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Username is required"),
+  username: Yup.string().required('Username is required'),
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+})
 
 export function SignIn() {
-  const dispatch = useDispatch();
-  const { user, loading, error } = useSelector((state) => state.user);
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const { user, loading, error } = useSelector((state) => state.user)
 
   const handleSubmitSignIn = (values) => {
-    dispatch(signInRequest(values));
-  };
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
+    dispatch(signInRequest(values))
+  }
 
   if (!user)
     return (
@@ -68,7 +60,7 @@ export function SignIn() {
                     onBlur={handleBlur}
                     autoComplete="username"
                     status={
-                      touched.username && errors.username ? "error" : undefined
+                      touched.username && errors.username ? 'error' : undefined
                     }
                   />
                 </Form.Item>
@@ -83,7 +75,7 @@ export function SignIn() {
                     onBlur={handleBlur}
                     autoComplete="current-password"
                     status={
-                      touched.password && errors.password ? "error" : undefined
+                      touched.password && errors.password ? 'error' : undefined
                     }
                   />
                 </Form.Item>
@@ -92,7 +84,7 @@ export function SignIn() {
                   <Checkbox
                     checked={values.remember}
                     onChange={(e) =>
-                      setFieldValue("remember", e.target.checked)
+                      setFieldValue('remember', e.target.checked)
                     }
                     onBlur={handleBlur}
                   >
@@ -108,7 +100,7 @@ export function SignIn() {
                     loading={loading}
                     disabled={loading}
                   >
-                    {loading ? "Signing In..." : "Sign In"}
+                    {loading ? 'Signing In...' : 'Sign In'}
                   </Button>
                 </Form.Item>
               </Form>
@@ -116,7 +108,7 @@ export function SignIn() {
           </Formik>
           <section>
             <div className="social-login">
-              Or, login with{" "}
+              Or, login with{' '}
               <Link to="#">
                 <svg
                   width="26"
@@ -142,7 +134,7 @@ export function SignIn() {
                     fill="#1976D2"
                   />
                 </svg>
-              </Link>{" "}
+              </Link>{' '}
               <Link to="#">
                 <svg
                   width="28"
@@ -185,5 +177,5 @@ export function SignIn() {
           <img src="/src/assets/images/sign-in/signin-banner.png" alt="" />
         </section>
       </div>
-    );
+    )
 }

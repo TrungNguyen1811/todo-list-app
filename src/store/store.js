@@ -10,8 +10,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActionPaths: ['payload.meta.callback'],
-        ignoredPaths: [],
+        ignoredPaths: ['payload.callback'],
+        ignoredActionPaths: ['payload.callback'],
       },
     }).concat(sagaMiddleware),
 })
