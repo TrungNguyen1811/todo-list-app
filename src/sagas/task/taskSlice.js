@@ -5,10 +5,12 @@ const taskSlice = createSlice({
   name: 'task',
   initialState: {
     list: [],
+    olderList: [],
     task: null,
     loading: false,
     error: null,
-    actionLoading: false,
+    submitLoading: false,
+    deleteLoading: false,
   },
   reducers: {
     // get task lists
@@ -40,45 +42,66 @@ const taskSlice = createSlice({
 
     // add task
     addTaskRequest: (state) => {
-      state.actionLoading = true
+      state.submitLoading = true
     },
     addTaskSuccess: (state) => {
-      state.actionLoading = false
+      state.submitLoading = false
     },
     addTaskFailure: (state, action) => {
-      state.actionLoading = false
+      state.submitLoading = false
       state.error = action.payload
     },
 
     updateTaskRequest: (state) => {
-      state.actionLoading = true
+      state.submitLoading = true
     },
-    updateTaskSuccess: (state, action) => {
-      state.actionLoading = false
+    updateTaskSuccess: (state) => {
+      state.submitLoading = false
+    },
+    updateTaskFailure: (state, action) => {
+      state.submitLoading = false
+      state.error = action.payload
+    },
+
+    // Optimistic updates for drag & drop
+    updateTaskOptimistic: (state, action) => {
       const updated = action.payload
       if (!updated) return
+
+      // Store original state in olderList for potential rollback (only if empty)
+      if (state.olderList.length === 0) {
+        state.olderList = [...state.list]
+      }
+
+      // Update the main list immediately for UI
       const indexInList = state.list.findIndex((t) => t.id === updated.id)
       if (indexInList !== -1) {
         state.list[indexInList] = updated
       }
-      if (state.task && state.task.id === updated.id) {
-        state.task = updated
+    },
+
+    // Rollback optimistic updates if API fails
+    rollbackTaskOptimistic: (state) => {
+      if (state.olderList.length > 0) {
+        state.list = [...state.olderList]
+        state.olderList = []
       }
     },
-    updateTaskFailure: (state, action) => {
-      state.actionLoading = false
-      state.error = action.payload
+
+    // Clear olderList after successful API call
+    clearOlderList: (state) => {
+      state.olderList = []
     },
 
     // deleteTask
     deleteTaskRequest: (state) => {
-      state.actionLoading = true
+      state.deleteLoading = true
     },
     deleteTaskSuccess: (state) => {
-      state.actionLoading = false
+      state.deleteLoading = false
     },
     deleteTaskFailure: (state, action) => {
-      state.actionLoading = false
+      state.deleteLoading = false
       state.error = action.payload
     },
   },
@@ -97,9 +120,11 @@ export const {
   updateTaskRequest,
   updateTaskSuccess,
   updateTaskFailure,
+  updateTaskOptimistic,
+  rollbackTaskOptimistic,
+  clearOlderList,
   deleteTaskRequest,
   deleteTaskSuccess,
   deleteTaskFailure,
-  clearError,
 } = taskSlice.actions
 export default taskSlice.reducer

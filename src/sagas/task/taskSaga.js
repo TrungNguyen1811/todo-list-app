@@ -1,4 +1,4 @@
-import { put, call, takeEvery, delay } from 'redux-saga/effects'
+import { put, call, takeEvery } from 'redux-saga/effects'
 import {
   getTasksRequest,
   getTasksSuccess,
@@ -12,6 +12,7 @@ import {
   updateTaskRequest,
   updateTaskSuccess,
   updateTaskFailure,
+  rollbackTaskOptimistic,
   deleteTaskRequest,
   deleteTaskSuccess,
   deleteTaskFailure,
@@ -58,23 +59,28 @@ function* handleUpdateTask(action) {
   try {
     const { values, meta } = action.payload
     const updatedTask = yield call(TASK_API.put, values)
-    // ensure we pass the updated entity back
     yield put(updateTaskSuccess(updatedTask))
+    yield put(showMessage.success('Task updated successfully'))
+    if (meta?.callback) {
+      yield call(meta.callback)
+    }
   } catch (error) {
     yield put(showMessage.error(error.message || 'Failed to update task'))
     yield put(updateTaskFailure(error.message || 'Failed to update task'))
-
-    // Optionally retry the update after a delay
-    // yield delay(2000)
-    // yield put(updateTaskRequest(action.payload))
+    yield put(rollbackTaskOptimistic())
   }
 }
 
 function* handleDeleteTask(action) {
   try {
-    const deletedTask = yield call(TASK_API.delete, action.payload)
+    const { id, meta } = action.payload
+    const deletedTask = yield call(TASK_API.delete, id)
     yield put(deleteTaskSuccess(deletedTask))
+    if (meta?.callback) {
+      yield call(meta.callback)
+    }
   } catch (error) {
+    yield put(showMessage.error(error.message || 'Failed to delete task'))
     yield put(deleteTaskFailure(error.message || 'Failed to delete task'))
   }
 }

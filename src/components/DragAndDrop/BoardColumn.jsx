@@ -1,12 +1,11 @@
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { useDndContext } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
+import { SortableContext } from "@dnd-kit/sortable";
+import { useDndContext, useDroppable } from "@dnd-kit/core";
 import { useMemo } from "react";
 import { TaskCard } from "./TaskCard";
-import { Card, Button, Drawer } from "antd";
+import { Card } from "antd";
 import "./BoardColumn.scss";
 
-export function BoardColumn({ column, tasks, isOverlay }) {
+export function BoardColumn({ column, tasks, isOverlay, onEditTask }) {
   const sortedTasks = useMemo(() => {
     return [...tasks].sort((a, b) => a.index - b.index);
   }, [tasks]);
@@ -15,39 +14,16 @@ export function BoardColumn({ column, tasks, isOverlay }) {
     return sortedTasks.map((task) => task.id);
   }, [sortedTasks]);
 
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: column.id,
-    data: {
-      type: "Column",
-      column,
-    },
-    attributes: {
-      roleDescription: `Column: ${column.title}`,
-    },
-  });
-
-  const style = {
-    transition,
-    transform: CSS.Translate.toString(transform),
-  };
+  const { setNodeRef } = useDroppable({ id: column.id, data: { type: "Column", column } })
 
   const getDraggingClass = () => {
     if (isOverlay) return "board-column--overlay";
-    if (isDragging) return "board-column--dragging";
     return "board-column--default";
   };
 
   return (
     <Card
       ref={setNodeRef}
-      style={style} 
       className={`board-column ${getDraggingClass()}`}
       size="small"
     >
@@ -58,7 +34,7 @@ export function BoardColumn({ column, tasks, isOverlay }) {
         <div className="board-column__content">
           <SortableContext items={tasksIds}>
             {sortedTasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard key={task.id} task={task} onEdit={onEditTask} />
             ))}
           </SortableContext>
         </div>

@@ -1,3 +1,4 @@
 import instance from './axios'
+import tasks from './tasks'
 
-export { instance }
+export { instance, tasks }
