@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from "redux-saga/effects";
+import { takeEvery, call, put } from 'redux-saga/effects'
 
 import {
   createUserSuccess,
@@ -10,54 +10,60 @@ import {
   signInSuccess,
   signInFailure,
   signInRequest,
-} from "./userSlice";
+} from './userSlice'
 
-import USERS_API from "@/services/users";
-import { showMessage } from "../appMessage/appMessageSlice";
+import USERS_API from '@/services/users'
+import { showMessage } from '../appMessage/appMessageSlice'
 
 function* handleGetUsers() {
   try {
-    const users = yield call(USERS_API.getAll);
-    yield put(getUsersSuccess(users));
+    const users = yield call(USERS_API.getAll)
+    yield put(getUsersSuccess(users))
   } catch (error) {
-    yield put(getUsersFailure(error.message));
+    yield put(getUsersFailure(error.message))
   }
 }
 
 function* handleCreateUser(action) {
   try {
-    const newUser = yield call(USERS_API.post, action.payload);
-    yield put(createUserSuccess(newUser));
-    yield put(showMessage.success("Create User Successfully"));
+    const { values, callback } = action.payload
+    const newUser = yield call(USERS_API.post, values)
+
+    yield put(createUserSuccess(newUser))
+    yield put(showMessage.success('Sign Up Successfully'))
+
+    if (callback) {
+      yield call(callback)
+    }
   } catch (error) {
-    yield put(createUserFailure(error.message));
-    yield put(showMessage.error(`Error: ${error.message}`));
+    yield put(createUserFailure(error.message))
+    yield put(showMessage.error(`Error: ${error.message}`))
   }
 }
 
 function* handleSignIn(action) {
   try {
-    const { username, password } = action.payload;
+    const { username, password } = action.payload
 
-    const users = yield call(USERS_API.get);
+    const users = yield call(USERS_API.get)
 
     const matchedUser = users.find(
       (u) => u.username === username && u.password === password
-    );
+    )
 
     if (matchedUser) {
-      localStorage.setItem("user", JSON.stringify(matchedUser));
-      yield put(signInSuccess(matchedUser));
+      localStorage.setItem('user', JSON.stringify(matchedUser))
+      yield put(signInSuccess(matchedUser))
     } else {
-      yield put(signInFailure("Incorrrect username or password"));
+      yield put(signInFailure('Incorrect username or password'))
     }
   } catch (error) {
-    yield put(signInFailure(error.message));
+    yield put(signInFailure(error.message))
   }
 }
 
 export default function* userSaga() {
-  yield takeEvery(createUserRequest.type, handleCreateUser);
-  yield takeEvery(getUsersRequest.type, handleGetUsers);
-  yield takeEvery(signInRequest.type, handleSignIn);
+  yield takeEvery(createUserRequest.type, handleCreateUser)
+  yield takeEvery(getUsersRequest.type, handleGetUsers)
+  yield takeEvery(signInRequest.type, handleSignIn)
 }

@@ -1,84 +1,89 @@
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import "./SignUp.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { createUserRequest, resetUserState } from "@/sagas/users/userSlice";
-import { Input, Button, Checkbox, Form } from "antd";
-import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
+import './SignUp.scss'
+import { useDispatch, useSelector } from 'react-redux'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { createUserRequest, resetUserState } from '@/sagas/users/userSlice'
+import { Input, Button, Checkbox, Form } from 'antd'
+import { useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 
 const fields = [
   {
-    name: "firstName",
-    placeholder: "Enter First Name",
+    name: 'firstName',
+    placeholder: 'Enter First Name',
     icon: <UserOutlined />,
   },
-  { name: "lastName", placeholder: "Enter Last Name", icon: <UserOutlined /> },
-  { name: "username", placeholder: "Enter Username", icon: <UserOutlined /> },
+  { name: 'lastName', placeholder: 'Enter Last Name', icon: <UserOutlined /> },
+  { name: 'username', placeholder: 'Enter Username', icon: <UserOutlined /> },
   {
-    name: "email",
-    placeholder: "Enter Your Email",
-    type: "email",
+    name: 'email',
+    placeholder: 'Enter Your Email',
+    type: 'email',
     icon: <MailOutlined />,
   },
   {
-    name: "password",
-    placeholder: "Enter Your Password",
-    type: "password",
+    name: 'password',
+    placeholder: 'Enter Your Password',
+    type: 'password',
     icon: <LockOutlined />,
   },
   {
-    name: "confirmPassword",
-    placeholder: "Confirm Your Password",
-    type: "password",
+    name: 'confirmPassword',
+    placeholder: 'Confirm Your Password',
+    type: 'password',
     icon: <LockOutlined />,
   },
-];
+]
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().required("First Name is required"),
-  lastName: Yup.string().required("Last Name is required"),
-  username: Yup.string().required("Username is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  firstName: Yup.string().required('First Name is required'),
+  lastName: Yup.string().required('Last Name is required'),
+  username: Yup.string().required('Username is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string()
-    .min(6, "Password too short")
-    .required("Password is required"),
+    .min(6, 'Password too short')
+    .required('Password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Confirm Password is required"),
-  terms: Yup.boolean().oneOf([true], "You must accept the Terms"),
-});
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
+  terms: Yup.boolean().oneOf([true], 'You must accept the Terms'),
+})
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  username: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
+  firstName: '',
+  lastName: '',
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
   terms: false,
-};
+}
 
 export function SignUp() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { loading, success, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { loading, error } = useSelector((state) => state.user)
 
-  useEffect(() => {
-    if (success) {
-      setTimeout(() => {
-        navigate("/sign-in");
-        dispatch(resetUserState());
-      }, 2000);
-    }
-  }, [success, error, navigate, dispatch]);
+  const handelSignUpSuccess = () => {
+    navigate('/sign-in')
+    dispatch(resetUserState())
+  }
 
   const handleSubmitSignUp = (values, { resetForm }) => {
-    const { confirmPassword, terms, ...userData } = values;
-    dispatch(createUserRequest(userData));
-    resetForm();
-  };
+    const userData = { ...values }
+
+    delete userData.confirmPassword
+    delete userData.terms
+
+    dispatch(
+      createUserRequest({
+        values: userData,
+        callback: () => handelSignUpSuccess(),
+      })
+    )
+    resetForm()
+  }
 
   return (
     <div className="sign-up-page container">
@@ -107,20 +112,20 @@ export function SignUp() {
             <Form onFinish={handleSubmit}>
               {fields.map((field) => {
                 const InputComponent =
-                  field.type === "password" ? Input.Password : Input;
+                  field.type === 'password' ? Input.Password : Input
 
                 return (
                   <Form.Item
                     key={field.name}
                     validateStatus={
-                      touched[field.name] && errors[field.name] ? "error" : ""
+                      touched[field.name] && errors[field.name] ? 'error' : ''
                     }
                     help={
                       touched[field.name] && errors[field.name]
                         ? errors[field.name]
-                        : ""
+                        : ''
                     }
-                    style={{ marginBottom: "16px" }}
+                    style={{ marginBottom: '16px' }}
                   >
                     <InputComponent
                       name={field.name}
@@ -132,22 +137,22 @@ export function SignUp() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       status={
-                        touched[field.name] && errors[field.name] ? "error" : ""
+                        touched[field.name] && errors[field.name] ? 'error' : ''
                       }
                     />
                   </Form.Item>
-                );
+                )
               })}
 
               <Form.Item
-                validateStatus={touched.terms && errors.terms ? "error" : ""}
-                help={touched.terms && errors.terms ? errors.terms : ""}
-                style={{ marginBottom: "16px" }}
+                validateStatus={touched.terms && errors.terms ? 'error' : ''}
+                help={touched.terms && errors.terms ? errors.terms : ''}
+                style={{ marginBottom: '16px' }}
               >
                 <Checkbox
                   name="terms"
                   checked={values.terms}
-                  onChange={(e) => setFieldValue("terms", e.target.checked)}
+                  onChange={(e) => setFieldValue('terms', e.target.checked)}
                   onBlur={handleBlur}
                 >
                   I agree to the <Link to="#">Terms and Conditions</Link>
@@ -157,13 +162,13 @@ export function SignUp() {
               {error && (
                 <div
                   className="error-message"
-                  style={{ color: "#ff4d4f", marginBottom: "16px" }}
+                  style={{ color: '#ff4d4f', marginBottom: '16px' }}
                 >
                   <p>{error}</p>
                 </div>
               )}
 
-              <Form.Item style={{ marginBottom: "16px" }}>
+              <Form.Item style={{ marginBottom: '16px' }}>
                 <Button
                   htmlType="submit"
                   type="primary"
@@ -172,7 +177,7 @@ export function SignUp() {
                   block
                   size="large"
                 >
-                  {loading ? "Submitting..." : "Sign Up"}
+                  {loading ? 'Submitting...' : 'Sign Up'}
                 </Button>
               </Form.Item>
 
@@ -184,5 +189,5 @@ export function SignUp() {
         </Formik>
       </section>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 // Lazy load component
@@ -10,6 +10,7 @@ import { SignIn } from '@/pages/SignIn/SignIn'
 import Priority from '@/pages/Priority'
 import ProtectedRoute from './protectedRoute'
 import TaskPage from '@/pages/TaskPage'
+import AuthRoute from './authRoute'
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<div>Loading page...</div>}>
-            <Dashboard />
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
           </Suspense>
         ),
       },
@@ -33,7 +36,9 @@ const router = createBrowserRouter([
         path: '/priority',
         element: (
           <Suspense fallback={<div>Loading page...</div>}>
-            <Priority />
+            <ProtectedRoute>
+              <Priority />
+            </ProtectedRoute>
           </Suspense>
         ),
       },
@@ -41,7 +46,9 @@ const router = createBrowserRouter([
         path: '/tasks',
         element: (
           <Suspense fallback={<div>Loading page...</div>}>
-            <TaskPage />
+            <ProtectedRoute>
+              <TaskPage />
+            </ProtectedRoute>
           </Suspense>
         ),
       },
@@ -51,16 +58,18 @@ const router = createBrowserRouter([
     path: '/sign-up',
     element: (
       <Suspense fallback={<div>Loading layout...</div>}>
-        <SignUp />
+        <AuthRoute>
+          <SignUp />
+        </AuthRoute>
       </Suspense>
     ),
   },
   {
     path: '/sign-in',
     element: (
-      <Suspense fallback={<div>Loading layout...</div>}>
+      <AuthRoute>
         <SignIn />
-      </Suspense>
+      </AuthRoute>
     ),
   },
   {
