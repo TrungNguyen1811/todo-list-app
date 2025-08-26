@@ -1,9 +1,7 @@
 @use '../../styles/variables' as *;
 
 .board-column {
-  width: 350px;
-  max-width: 100%;
-  // background-color: $color-bg-light;
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -99,12 +97,15 @@
   }
 
   &__inner {
-    display: flex;
+    display: grid;
     gap: 1rem;
-    align-items: flex-start;
-    flex-direction: row;
-    justify-content: flex-start;
-    width: max-content;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    min-width: 100rem;
+    // align-items: flex-start;
+    // flex-direction: row;
+    // justify-content: space-between;
+    // width: max-content;
     padding: 0.5rem;
   }
 }

@@ -20,8 +20,14 @@ export function calculateNewIndex(prevTask, nextTask) {
   } else if (!nextTask) {
     return prevTask.index + 1000
   } else {
-    const gap = (nextTask.index - prevTask.index) / 2
-    return prevTask.index + gap
+    const prevIndex = typeof prevTask.index === 'number' ? prevTask.index : 0
+    const nextIndex = typeof nextTask.index === 'number' ? nextTask.index : prevIndex + 2000
+    const gap = Math.floor((nextIndex - prevIndex) / 2)
+    // Ensure we always move forward at least by 1 when there is no room between indices
+    if (gap <= 0) {
+      return prevIndex + 1
+    }
+    return prevIndex + gap
   }
 }
 
