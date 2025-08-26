@@ -42,7 +42,6 @@ export function useSignUpForm() {
     const userData = { ...values };
     delete userData.confirmPassword;
     delete userData.terms;
-    console.log("Submitting user data:", userData);
 
     dispatch(
       createUserRequest({

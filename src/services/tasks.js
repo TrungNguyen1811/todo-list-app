@@ -1,9 +1,9 @@
 import instance from "./axios";
 
 const TASK_API = {
-  get: async () => {
+  get: async (params) => {
     try {
-      const res = await instance.get("/todos");
+      const res = await instance.get("/todos", { params });
       return res.data;
     } catch (error) {
       throw error.message;
@@ -13,7 +13,6 @@ const TASK_API = {
   getTask: async (task) => {
     try {
       const res = await instance.get(`/todos/${task.id}`);
-      console.log(res);
       return res.data;
     } catch (error) {
       throw error.message;

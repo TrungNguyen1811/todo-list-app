@@ -21,9 +21,10 @@ import TASK_API from "../../services/tasks";
 import { showMessage } from "@/sagas/appMessage/appMessageSlice";
 
 // get all to-do list
-function* handleGetTasks() {
+function* handleGetTasks(action) {
   try {
-    const getTasks = yield call(TASK_API.get);
+    const params = action.payload ?? {};
+    const getTasks = yield call(TASK_API.get, params);
     yield put(getTasksSuccess(getTasks));
   } catch (error) {
     yield put(getTasksFailure(error.message || "Failed to load tasks"));

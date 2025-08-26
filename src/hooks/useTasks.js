@@ -1,9 +1,13 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
 
 const useTasks = () => {
   const formikRef = useRef();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+
+  const { listPriorities } = useSelector((state) => state.priorities);
 
   const openModalAddTask = () => {
     if (formikRef.current) {
@@ -13,8 +17,7 @@ const useTasks = () => {
     setIsModalVisible(true);
   };
 
-  const openModalUpdateTask = (task) => {
-    setEditingTask(task || null);
+  const openModalUpdateTask = () => {
     setIsModalVisible(true);
   };
 
@@ -27,6 +30,11 @@ const useTasks = () => {
     setIsModalVisible(isVisible);
   };
 
+  let priorityData = listPriorities.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
   return {
     openModalAddTask,
     openModalUpdateTask,
@@ -35,6 +43,7 @@ const useTasks = () => {
     editingTask,
     formikRef,
     visibleModalTask,
+    priorityData,
   };
 };
 

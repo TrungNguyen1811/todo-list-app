@@ -1,18 +1,11 @@
-import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { BoardColumn, BoardContainer } from "./BoardColumn";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { TaskCard } from "./TaskCard";
 import { hasDraggableData } from "./utils";
-import {
-  getTasksRequest,
-  updateTaskRequest,
-  updateTaskOptimistic,
-  clearOlderList,
-} from "@/sagas/task/taskSlice";
 import { DEFAULT_COLUMNS } from "@/constants/status";
 import { useKanbanSensors } from "./hooks/useKanbanSensors";
 import { useKanbanPreview } from "./hooks/useKanbanPreview";
@@ -25,12 +18,6 @@ const getTasksByStatus = (tasks) => {
     group[key].push(task);
     return group;
   }, {});
-};
-
-const getTargetColumnTasks = (tasks, status, excludeId) => {
-  return tasks
-    .filter((t) => t.status === status && t.id !== excludeId)
-    .sort((a, b) => a.index - b.index);
 };
 
 export function KanbanBoard({ onEditTask }) {
@@ -67,11 +54,6 @@ export function KanbanBoard({ onEditTask }) {
     setPreviewOverride,
     lastAppliedRef,
   });
-
-  // Fetch tasks on component mount
-  useEffect(() => {
-    dispatch(getTasksRequest());
-  }, []);
 
   const onDragStart = useCallback(
     (event) => {
@@ -144,177 +126,4 @@ export function KanbanBoard({ onEditTask }) {
         )}
     </DndContext>
   );
-
-  function onDragStart(event) {
-    if (!hasDraggableData(event.active)) return;
-    const data = event.active.data.current;
-    if (data?.type === "Column") {
-      setActiveColumn(data.column);
-      return;
-    }
-
-    if (data?.type === "Task") {
-      setActiveTask(data.task);
-      return;
-    }
-  }
-
-  function onDragEnd(event) {
-    const { active, over } = event;
-    if (!over) {
-      return;
-    }
-
-    if (!hasDraggableData(active)) {
-      return;
-    }
-
-    const activeData = active.data.current;
-
-    // Handle Task dragging
-    if (activeData?.type === "Task") {
-      if (olderList && olderList.length > 0) {
-        const movedTask = tasks.find((task) => {
-          const originalTask = olderList.find((t) => t.id === task.id);
-          return (
-            originalTask &&
-            (originalTask.status !== task.status ||
-              originalTask.index !== task.index)
-          );
-        });
-
-        if (movedTask) {
-          // Call API to persist the changes
-          dispatch(
-            updateTaskRequest({
-              values: movedTask,
-              meta: {
-                callback: () => {
-                  dispatch(clearOlderList());
-                  dispatch(getTasksRequest());
-                },
-              },
-            })
-          );
-        }
-      }
-      setActiveColumn(null);
-      setActiveTask(null);
-    }
-  }
-
-  function onDragOver(event) {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = active.id;
-    const overId = over.id;
-
-    if (activeId === overId) {
-      return;
-    }
-
-    if (!hasDraggableData(active) || !hasDraggableData(over)) {
-      return;
-    }
-
-    const activeData = active.data.current;
-    const overData = over.data.current;
-
-    const isActiveATask = activeData?.type === "Task";
-    const isOverATask = overData?.type === "Task";
-
-    if (!isActiveATask) return;
-
-    // Im dropping a Task over another Task
-    if (isActiveATask && isOverATask) {
-      const activeTaskInStore = tasks.find((t) => t.id === activeId);
-      const overTask = tasks.find((t) => t.id === overId);
-
-      if (!activeTaskInStore || !overTask) {
-        return;
-      }
-
-      // Use the original status from drag start to determine cross-column
-      const originalActiveTask = active.data.current.task;
-      const isCrossColumn = originalActiveTask.status !== overTask.status;
-
-      // Build target column task list (sorted, excluding the active task)
-      const targetColumnId = isCrossColumn
-        ? overTask.status
-        : activeTaskInStore.status;
-      const targetColumnTasks = tasks
-        .filter(
-          (t) => t.status === targetColumnId && t.id !== activeTaskInStore.id
-        )
-        .sort((a, b) => a.index - b.index);
-
-      const overPos = targetColumnTasks.findIndex((t) => t.id === overTask.id);
-
-      // Decide placement relative to the over task
-      let prevTask = null;
-      let nextTask = null;
-
-      if (!isCrossColumn && activeTaskInStore.index < overTask.index) {
-        // Moving down within same column => place after overTask
-        prevTask = overTask;
-        nextTask = targetColumnTasks[overPos + 1] || null;
-      } else {
-        // Cross column, or moving up => place before overTask
-        prevTask = targetColumnTasks[overPos - 1] || null;
-        nextTask = overTask;
-      }
-
-      const newIndex = calculateNewIndex(prevTask, nextTask);
-      const updatedTask = {
-        ...activeTaskInStore,
-        status: targetColumnId,
-        index: newIndex,
-      };
-
-      // Guard against redundant dispatches on hover: only dispatch when something actually changes
-      if (
-        updatedTask.status !== activeTaskInStore.status ||
-        updatedTask.index !== activeTaskInStore.index
-      ) {
-        dispatch(updateTaskOptimistic(updatedTask));
-      }
-    }
-
-    const isOverAColumn = overData?.type === "Column";
-
-    // Im dropping a Task over a column
-    if (isActiveATask && isOverAColumn) {
-      const activeTaskInStore = tasks.find((t) => t.id === activeId);
-      if (!activeTaskInStore) {
-        return;
-      }
-
-      // Determine cross column using the original status from drag start
-      const originalActiveTask = active.data.current.task;
-      // Only proceed if target column actually differs from current store value
-      if (originalActiveTask.status !== overId) {
-        const targetColumnTasks = tasks
-          .filter((t) => t.status === overId && t.id !== activeTaskInStore.id)
-          .sort((a, b) => a.index - b.index);
-
-        const prevTask =
-          targetColumnTasks[targetColumnTasks.length - 1] || null;
-        const nextTask = null;
-        const newIndex = calculateNewIndex(prevTask, nextTask);
-
-        const updatedTask = {
-          ...activeTaskInStore,
-          status: overId,
-          index: newIndex,
-        };
-        if (
-          updatedTask.status !== activeTaskInStore.status ||
-          updatedTask.index !== activeTaskInStore.index
-        ) {
-          dispatch(updateTaskOptimistic(updatedTask));
-        }
-      }
-    }
-  }
 }
