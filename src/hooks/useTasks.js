@@ -17,10 +17,10 @@ const useTasks = () => {
     setIsModalVisible(true);
   };
 
-  const openModalUpdateTask = () => {
+  const openModalUpdateTask = (task) => {
+    setEditingTask(task || null);
     setIsModalVisible(true);
   };
-
   const cancelModalTask = () => {
     setIsModalVisible(false);
     setEditingTask(null);
@@ -41,6 +41,7 @@ const useTasks = () => {
     cancelModalTask,
     isModalVisible,
     editingTask,
+    setEditingTask,
     formikRef,
     visibleModalTask,
     priorityData,

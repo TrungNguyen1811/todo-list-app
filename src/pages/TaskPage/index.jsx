@@ -33,6 +33,7 @@ const TaskPage = () => {
 
   const {
     openModalAddTask,
+    openModalUpdateTask,
     cancelModalTask,
     isModalVisible,
     editingTask,
@@ -40,6 +41,10 @@ const TaskPage = () => {
     visibleModalTask,
     priorityData,
   } = useTasks();
+
+  // const handleEditTask = (task) => {
+  //   openModalUpdateTask(task);
+  // };
 
   const handlePriorityChange = (value) => {
     setFilter((prev) => ({ ...prev, priorityId: value }));
@@ -108,7 +113,7 @@ const TaskPage = () => {
           }
         >
           {tasks.length > 0 ? (
-            <KanbanBoard />
+            <KanbanBoard onEditTask={openModalUpdateTask} />
           ) : (
             <Typography.Text type="secondary">Task not found</Typography.Text>
           )}
