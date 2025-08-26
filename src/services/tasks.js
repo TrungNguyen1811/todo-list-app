@@ -1,22 +1,21 @@
-import instance from './axios'
+import instance from "./axios";
 
 const TASK_API = {
-  get: async () => {
+  get: async (params) => {
     try {
-      const res = await instance.get('/todos')
-      return res.data
+      const res = await instance.get("/todos", { params });
+      return res.data;
     } catch (error) {
-      throw error.message
+      throw error.message;
     }
   },
 
   getTask: async (task) => {
     try {
-      const res = await instance.get(`/todos/${task.id}`)
-      console.log(res)
-      return res.data
+      const res = await instance.get(`/todos/${task.id}`);
+      return res.data;
     } catch (error) {
-      throw error.message
+      throw error.message;
     }
   },
 
@@ -29,11 +28,11 @@ const TASK_API = {
         priorityId: task.priorityId,
         index: task.index,
         userId: task.userId,
-      })
+      });
 
-      return res.data
+      return res.data;
     } catch (error) {
-      throw error.message
+      throw error.message;
     }
   },
 
@@ -46,21 +45,21 @@ const TASK_API = {
         priorityId: task.priorityId,
         index: task.index,
         userId: task.userId,
-      })
-      return res.data
+      });
+      return res.data;
     } catch (error) {
-      throw error.message
+      throw error.message;
     }
   },
 
   delete: async (id) => {
     try {
-      const res = await instance.delete(`/todos/${id}`)
-      return res.data
+      const res = await instance.delete(`/todos/${id}`);
+      return res.data;
     } catch (error) {
-      throw error.message
+      throw error.message;
     }
   },
-}
+};
 
-export default TASK_API
+export default TASK_API;

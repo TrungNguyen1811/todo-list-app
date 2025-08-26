@@ -2,12 +2,12 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, Tag, Avatar, Tooltip } from "antd";
 import "./TaskCard.scss";
-import { ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { formatDate, getPriorityText } from '@/utils/taskHelpers';
+import { ClockCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { formatDate, getPriorityText } from "@/utils/taskHelpers";
 
 export function TaskCard({ task, isOverlay, onEdit }) {
-  const { user } = useSelector((state => state.user));
+  const { user } = useSelector((state) => state.user);
 
   // Avoid registering overlay cards as sortable to prevent extra re-renders/loops
   const sortableProps = isOverlay
@@ -30,7 +30,14 @@ export function TaskCard({ task, isOverlay, onEdit }) {
         },
       });
 
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = sortableProps;
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = sortableProps;
 
   const style = {
     transition,
@@ -67,35 +74,37 @@ export function TaskCard({ task, isOverlay, onEdit }) {
         <div className="task-card__content">
           <div className="task-card__header">
             <div className="task-card__priority-section">
-            <Tag 
-              color={task?.priorities?.color} 
-              className="task-card__priority-tag"
-            >
-              {getPriorityText(task?.priorities?.name || "")}
-            </Tag>
+              <Tag
+                color={task?.priorities?.color}
+                className="task-card__priority-tag"
+              >
+                {getPriorityText(task?.priorities?.name || "")}
+              </Tag>
             </div>
           </div>
 
           <div className="task-card__body">
             <h4 className="task-card__title">
-                {task.title.length > 20 
-                  ? `${task.title.substring(0, 26)}...` 
-                  : task.title
-                }
+              {task.title.length > 20
+                ? `${task.title.substring(0, 26)}...`
+                : task.title}
             </h4>
             {task.description && (
               <p className="task-card__description">
-                {task.description.length > 100 
-                  ? `${task.description.substring(0, 100)}...` 
-                  : task.description
-                }
+                {task.description.length > 100
+                  ? `${task.description.substring(0, 100)}...`
+                  : task.description}
               </p>
             )}
           </div>
 
           <div className="task-card__footer">
             <div className="task-card__user-info">
-              <Tooltip title={user ? `${user.firstName} ${user.lastName}` : 'Unknown User'}>
+              <Tooltip
+                title={
+                  user ? `${user.firstName} ${user.lastName}` : "Unknown User"
+                }
+              >
                 <Avatar
                   style={{ backgroundColor: "#ff6867" }}
                   size="small"
@@ -107,13 +116,15 @@ export function TaskCard({ task, isOverlay, onEdit }) {
             </div>
 
             <div className="task-card__meta">
-              <Tooltip title={new Date(task.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}>
+              <Tooltip
+                title={new Date(task.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              >
                 <span className="task-card__time">
                   <ClockCircleOutlined className="task-card__time-icon" />
                   {formatDate(task.createdAt)}
@@ -126,4 +137,3 @@ export function TaskCard({ task, isOverlay, onEdit }) {
     </>
   );
 }
-

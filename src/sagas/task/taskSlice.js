@@ -1,8 +1,8 @@
 // src/features/task/taskSlice.js
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const taskSlice = createSlice({
-  name: 'task',
+  name: "task",
   initialState: {
     list: [],
     olderList: [],
@@ -15,97 +15,97 @@ const taskSlice = createSlice({
   reducers: {
     // get task lists
     getTasksRequest: (state) => {
-      state.loading = true
+      state.loading = true;
     },
     getTasksSuccess: (state, action) => {
-      state.loading = false
-      state.list = action.payload
+      state.loading = false;
+      state.list = action.payload;
     },
     getTasksFailure: (state, action) => {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;
     },
 
     // get task
     getTaskRequest: (state) => {
-      state.loading = true
-      state.error = null
+      state.loading = true;
+      state.error = null;
     },
     getTaskSuccess: (state, action) => {
-      state.loading = false
-      state.task = action.payload
+      state.loading = false;
+      state.task = action.payload;
     },
     getTaskFailure: (state, action) => {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;
     },
 
     // add task
     addTaskRequest: (state) => {
-      state.submitLoading = true
+      state.submitLoading = true;
     },
     addTaskSuccess: (state) => {
-      state.submitLoading = false
+      state.submitLoading = false;
     },
     addTaskFailure: (state, action) => {
-      state.submitLoading = false
-      state.error = action.payload
+      state.submitLoading = false;
+      state.error = action.payload;
     },
 
     updateTaskRequest: (state) => {
-      state.submitLoading = true
+      state.submitLoading = true;
     },
     updateTaskSuccess: (state) => {
-      state.submitLoading = false
+      state.submitLoading = false;
     },
     updateTaskFailure: (state, action) => {
-      state.submitLoading = false
-      state.error = action.payload
+      state.submitLoading = false;
+      state.error = action.payload;
     },
 
     // Optimistic updates for drag & drop
     updateTaskOptimistic: (state, action) => {
-      const updated = action.payload
-      if (!updated) return
+      const updated = action.payload;
+      if (!updated) return;
 
       // Store original state in olderList for potential rollback (only if empty)
       if (state.olderList.length === 0) {
-        state.olderList = [...state.list]
+        state.olderList = [...state.list];
       }
 
       // Update the main list immediately for UI
-      const indexInList = state.list.findIndex((t) => t.id === updated.id)
+      const indexInList = state.list.findIndex((t) => t.id === updated.id);
       if (indexInList !== -1) {
-        state.list[indexInList] = updated
+        state.list[indexInList] = updated;
       }
     },
 
     // Rollback optimistic updates if API fails
     rollbackTaskOptimistic: (state) => {
       if (state.olderList.length > 0) {
-        state.list = [...state.olderList]
-        state.olderList = []
+        state.list = [...state.olderList];
+        state.olderList = [];
       }
     },
 
     // Clear olderList after successful API call
     clearOlderList: (state) => {
-      state.olderList = []
+      state.olderList = [];
     },
 
     // deleteTask
     deleteTaskRequest: (state) => {
-      state.deleteLoading = true
+      state.deleteLoading = true;
     },
     deleteTaskSuccess: (state) => {
-      state.deleteLoading = false
+      state.deleteLoading = false;
     },
     deleteTaskFailure: (state, action) => {
-      state.deleteLoading = false
-      state.error = action.payload
+      state.deleteLoading = false;
+      state.error = action.payload;
     },
   },
-})
+});
 
 export const {
   getTasksRequest,
@@ -126,5 +126,5 @@ export const {
   deleteTaskRequest,
   deleteTaskSuccess,
   deleteTaskFailure,
-} = taskSlice.actions
-export default taskSlice.reducer
+} = taskSlice.actions;
+export default taskSlice.reducer;

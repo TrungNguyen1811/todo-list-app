@@ -14,7 +14,10 @@ export function BoardColumn({ column, tasks, isOverlay, onEditTask }) {
     return sortedTasks.map((task) => task.id);
   }, [sortedTasks]);
 
-  const { setNodeRef } = useDroppable({ id: column.id, data: { type: "Column", column } })
+  const { setNodeRef } = useDroppable({
+    id: column.id,
+    data: { type: "Column", column },
+  });
 
   const getDraggingClass = () => {
     if (isOverlay) return "board-column--overlay";
@@ -47,14 +50,14 @@ export function BoardContainer({ children }) {
   const dndContext = useDndContext();
 
   const getDraggingClass = () => {
-    return dndContext.active ? "board-container--active" : "board-container--default";
+    return dndContext.active
+      ? "board-container--active"
+      : "board-container--default";
   };
 
   return (
     <div className={`board-container ${getDraggingClass()}`}>
-      <div className="board-container__inner">
-        {children}
-      </div>
+      <div className="board-container__inner">{children}</div>
     </div>
   );
 }
