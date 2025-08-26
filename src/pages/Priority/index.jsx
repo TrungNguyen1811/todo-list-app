@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from 'react'
 import {
   Layout,
   Card,
@@ -9,114 +9,55 @@ import {
   Modal,
   Form,
   Input,
-  Select,
   ColorPicker,
-  Popconfirm,
-  Tooltip,
-  Badge,
-} from "antd";
+} from 'antd'
 import {
+  DeleteOutlined,
+  EditOutlined,
   PicLeftOutlined,
   PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons'
 
-import { Flex } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { Empty } from "antd";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import {
-  addPriorityRequest,
-  deletePriorityRequest,
-  getPrioritiesRequest,
-  updatePriorityRequest,
-} from "@/sagas/priorities/prioritiesSlice";
-import FormItem from "antd/es/form/FormItem";
-import { useRef } from "react";
-import { useMemo } from "react";
-const { Content } = Layout;
-const { Title, Text } = Typography;
+import { Flex } from 'antd'
+import { Empty } from 'antd'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import FormItem from 'antd/es/form/FormItem'
+import usePriority from '@/hooks/usePriority'
+import { LayoutPriorityStyled } from './PriorityStyled'
+import { useMemo } from 'react'
+import { Badge } from 'antd'
+import { Tooltip } from 'antd'
+import { Popconfirm } from 'antd'
+const { Content } = Layout
+const { Title, Text } = Typography
+
 const Priority = () => {
-  const dispatch = useDispatch();
-  const formikRef = useRef();
-  const { listPriorities, loading, actionLoading } = useSelector(
-    (state) => state.priorities
-  );
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editingPriority, setEditingPriority] = useState(null);
+  const {
+    formikRef,
+    loading,
+    actionLoading,
+    listPriorities,
+    isModalVisible,
+    editingPriority,
+    handleAddPriority,
+    handleModalCancel,
+    submitForm,
+    handleGetPriorities,
+    handleEditPriority,
+    handleDeletePriority,
+  } = usePriority()
 
   useEffect(() => {
-    dispatch(getPrioritiesRequest());
-  }, [dispatch]);
-
-  const handleAddPriority = () => {
-    if (formikRef.current) {
-      formikRef.current.resetForm();
-    }
-    setEditingPriority(null);
-    setIsModalVisible(true);
-  };
-
-  const handleEditPriority = (priority) => {
-    setEditingPriority(priority);
-    setIsModalVisible(true);
-  };
-
-  const handleDeletePriority = (priorityId) => {
-    dispatch(
-      deletePriorityRequest({
-        id: priorityId,
-        meta: {
-          callback: () => {
-            dispatch(getPrioritiesRequest());
-          },
-        },
-      })
-    );
-  };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-    setEditingPriority(null);
-  };
-
-  const submitForm = (values) => {
-    if (editingPriority) {
-      dispatch(
-        updatePriorityRequest({
-          values: { ...values, id: editingPriority.id },
-          meta: {
-            callback: () => {
-              setIsModalVisible(false);
-              dispatch(getPrioritiesRequest());
-            },
-          },
-        })
-      );
-    } else {
-      dispatch(
-        addPriorityRequest({
-          values: values,
-          meta: {
-            callback: () => {
-              setIsModalVisible(false);
-              dispatch(getPrioritiesRequest());
-            },
-          },
-        })
-      );
-    }
-  };
+    handleGetPriorities()
+  }, [handleGetPriorities])
 
   const columns = useMemo(() => {
     return [
       {
-        title: "Priority Name",
-        dataIndex: "name",
-        key: "name",
+        title: 'Priority Name',
+        dataIndex: 'name',
+        key: 'name',
         render: (text, record) => (
           <Space>
             <Badge color={record.color} />
@@ -125,9 +66,9 @@ const Priority = () => {
         ),
       },
       {
-        title: "Color",
-        dataIndex: "color",
-        key: "color",
+        title: 'Color',
+        dataIndex: 'color',
+        key: 'color',
         width: 180,
         render: (color) => (
           <div
@@ -136,20 +77,20 @@ const Priority = () => {
               height: 20,
               backgroundColor: color,
               borderRadius: 4,
-              border: "1px solid #d9d9d9",
+              border: '1px solid #d9d9d9',
             }}
           />
         ),
       },
       {
-        title: "Description",
-        dataIndex: "description",
-        key: "description",
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description',
         ellipsis: true,
       },
       {
-        title: "Actions",
-        key: "action",
+        title: 'Actions',
+        key: 'action',
         width: 150,
         render: (_, record) => (
           <Space>
@@ -166,7 +107,7 @@ const Priority = () => {
                 name="Confirm Delete"
                 description={
                   record.isDefault
-                    ? "Default priority cannot be deleted!"
+                    ? 'Default priority cannot be deleted!'
                     : `Are you sure you want to delete priority "${record.name}"?`
                 }
                 onConfirm={() => handleDeletePriority(record.id)}
@@ -186,11 +127,11 @@ const Priority = () => {
           </Space>
         ),
       },
-    ];
-  }, [listPriorities]);
+    ]
+  }, [listPriorities])
 
   return (
-    <Layout style={{ minHeight: "100vh" }} className="dashboard">
+    <LayoutPriorityStyled style={{ minHeight: '100vh' }}>
       <Flex className="dashboard-header">
         <Title level={2} className="dashboard-title">
           <Space>
@@ -239,7 +180,7 @@ const Priority = () => {
       </Content>
 
       <Modal
-        title={editingPriority ? "Edit Priority" : "Add New Priority"}
+        title={editingPriority ? 'Edit Priority' : 'Add New Priority'}
         open={isModalVisible}
         onCancel={handleModalCancel}
         footer={null}
@@ -249,13 +190,13 @@ const Priority = () => {
           innerRef={formikRef}
           enableReinitialize
           initialValues={{
-            name: editingPriority ? editingPriority.name : "",
-            color: editingPriority ? editingPriority.color : "",
-            description: editingPriority ? editingPriority.description : "",
+            name: editingPriority ? editingPriority.name : '',
+            color: editingPriority ? editingPriority.color : '',
+            description: editingPriority ? editingPriority.description : '',
           }}
           validationSchema={Yup.object({
-            name: Yup.string().required("Name is required"),
-            color: Yup.string().required("Color is required"),
+            name: Yup.string().required('Name is required'),
+            color: Yup.string().required('Color is required'),
           })}
           onSubmit={submitForm}
         >
@@ -273,7 +214,7 @@ const Priority = () => {
                 required
                 label="Name "
                 help={errors.name && touched.name && errors.name}
-                validateStatus={errors.name && touched.name ? "error" : ""}
+                validateStatus={errors.name && touched.name ? 'error' : ''}
               >
                 <Input
                   type="name"
@@ -288,14 +229,14 @@ const Priority = () => {
                 required
                 label="Color"
                 help={errors.color && touched.color && errors.color}
-                validateStatus={errors.color && touched.color ? "error" : ""}
+                validateStatus={errors.color && touched.color ? 'error' : ''}
               >
                 <ColorPicker
                   value={values.color}
                   onChange={(color) => {
                     const hex =
-                      typeof color === "string" ? color : color.toHexString();
-                    setFieldValue("color", hex);
+                      typeof color === 'string' ? color : color.toHexString()
+                    setFieldValue('color', hex)
                   }}
                   showText
                 />
@@ -309,7 +250,7 @@ const Priority = () => {
                   errors.description
                 }
                 validateStatus={
-                  errors.description && touched.description ? "error" : ""
+                  errors.description && touched.description ? 'error' : ''
                 }
               >
                 <Input
@@ -333,8 +274,8 @@ const Priority = () => {
           )}
         </Formik>
       </Modal>
-    </Layout>
-  );
-};
+    </LayoutPriorityStyled>
+  )
+}
 
-export default Priority;
+export default Priority
