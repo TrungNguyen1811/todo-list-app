@@ -23,78 +23,32 @@ import {
 
 import './Dashboard.scss'
 import { Flex } from 'antd'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { getTasksRequest } from '@/sagas/task/taskSlice'
 import { PRIORITY_COLOR, STATUS_COLOR, STATUS_TEXT } from '@/constants/status'
-import { useMemo } from 'react'
 import { Spin } from 'antd'
-import { theme } from 'antd'
 import { Empty } from 'antd'
+import useDashboard from '@/hooks/useDashboard'
+import { useEffect } from 'react'
+import { LayoutDashboardStyled } from './DashboardStyled'
 const { Content } = Layout
 const { Title, Text } = Typography
 
 const Dashboard = () => {
-  const { list: tasks, loading } = useSelector((state) => state.task)
-  const dispatch = useDispatch()
   const {
-    token: { colorComplete, colorInProgress, colorInComplete },
-  } = theme.useToken()
+    todayTasks,
+    todayStats,
+    allStats,
+    loading,
+    colorComplete,
+    colorInProgress,
+    colorInComplete,
+    getListTask,
+  } = useDashboard()
+
   useEffect(() => {
-    dispatch(getTasksRequest())
-  }, [dispatch])
-
-  const { todayTasks, allStats } = useMemo(() => {
-    const todayTasks = tasks.filter((task) => {
-      const today = new Date().toLocaleDateString()
-      return (
-        task?.createdAt &&
-        new Date(task.createdAt).toLocaleDateString() === today
-      )
-    })
-
-    const total = tasks.length
-    const completed = tasks.filter((task) => task.status === 'completed').length
-    const inProgress = tasks.filter(
-      (task) => task.status === 'inprogress'
-    ).length
-    const inComplete = tasks.filter(
-      (task) => task.status === 'incomplete'
-    ).length
-    const overdue = tasks.filter(
-      (task) =>
-        new Date(task.dueDate) < new Date() && task.status !== 'completed'
-    ).length
-
-    const allStats = { total, completed, inProgress, inComplete, overdue }
-
-    return { todayTasks, allStats }
-  }, [tasks])
-
-  const todayStats = useMemo(() => {
-    const total = todayTasks.length
-    const completed = todayTasks.filter(
-      (task) => task.status === 'completed'
-    ).length
-    const inProgress = todayTasks.filter(
-      (task) => task.status === 'inprogress'
-    ).length
-    const inComplete = todayTasks.filter(
-      (task) => task.status === 'incomplete'
-    ).length
-    return {
-      total,
-      completed,
-      inProgress,
-      inComplete,
-      completedPercent: total > 0 ? Math.round((completed / total) * 100) : 0,
-      inProgressPercent: total > 0 ? Math.round((inProgress / total) * 100) : 0,
-      inCompletePercent: total > 0 ? Math.round((inComplete / total) * 100) : 0,
-    }
-  }, [todayTasks])
+    getListTask()
+  }, [getListTask])
   return (
-    <Layout style={{ minHeight: '100vh' }} className="dashboard">
+    <LayoutDashboardStyled>
       <Flex className="dashboard-header">
         <Title level={2} className="dashboard-title">
           <Space>
@@ -291,7 +245,7 @@ const Dashboard = () => {
           </Row>
         </Content>
       </Spin>
-    </Layout>
+    </LayoutDashboardStyled>
   )
 }
 
